@@ -1,0 +1,50 @@
+/* Đổi màu của placeholder trong DxTextBox */
+:deep(.dx-textbox input::placeholder) {
+	color: var(--text-placeholder-color);
+}
+
+/*SELECT BOX*/
+.text {
+	height: 36px;
+	font-weight: bold;
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+.customIcon {
+	background: url('../../../assets/imgs/Icon.41fe681.svg') no-repeat -319px -249px;
+	width: 10px;
+	height: 6px;
+	display: inline-block;
+	margin: auto;
+}
+.btn {
+	display: flex;
+	height: 100%;
+	background-color: transparent;
+}
+
+/*CHUNG*/
+.error {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
+	background-color: #fff;
+	border-radius: 4px;
+	padding: 0 !important;
+}
+.validator {
+	position: relative;
+	height: 36px;
+}
+/* :deep(.dx-button-mode-contained) {
+	border: none !important;
+} */
+
+:deep(
+		.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-popup-done[aria-label='Lưu']
+	) {
+	background-color: var(--primary);
+}

@@ -1,0 +1,42 @@
+@import "./transition";
+@import "./element-plus";
+@import "./sidebar";
+@import "./dark";
+
+/* 自定义全局 CssVar */
+:root {
+  /* 左侧菜单展开、收起动画时长 */
+  --pure-transition-duration: 0.3s;
+}
+
+/* 灰色模式 */
+.html-grey {
+  filter: grayscale(100%);
+}
+
+/* 色弱模式 */
+.html-weakness {
+  filter: invert(80%);
+}
+
+div.border-radius-12 {
+  border-radius: 12px;
+}
+button.bg-danger-blur{
+  background-color: #FF694A33;
+  color: #A83632;
+  border-color: #FF694A33;
+}
+button.bg-success-blur {
+  background-color: #3A865533;
+  color: #3A8655;
+  border-color: #3A865533
+}
+button.bg-warning-blur {
+  background-color: #D4AF3733 !important;
+  color: #D4AF37 !important;
+  border-color: #D4AF3733 !important;
+}
+.min-width-90{
+  min-width: 90px;
+}

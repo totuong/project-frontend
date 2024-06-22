@@ -1,0 +1,5 @@
+.content{
+    width: 100%;
+    background-color: #F0F0F0;
+    min-height: calc(100vh - 72px);
+}
