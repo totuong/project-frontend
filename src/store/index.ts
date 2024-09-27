@@ -1,10 +1,4 @@
-import { createPinia } from 'pinia';
+import { createPinia } from 'pinia'
+const pinia = createPinia()
 
-// Tạo một store Pinia
-const pinia = createPinia();
-
-export default pinia;
-
-const store = pinia;
-
-export { store };
+export default pinia
