@@ -17,15 +17,10 @@ const userStore = useUserStore(pinia)
 router.beforeEach(async (to, from, next) => {
   document.title = to.meta.title + ` | ${setting.title}`
   nprogress.start()
- 
   const token = userStore.token
-
-  const username = userStore.username
-  console.log("🚀 ~ router.beforeEach ~ token:", username)
   if (token) {
-    console.log("🚀 ~ router.beforeEach ~ token:", token)
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({ path: '/user' })
     } else {
       if (username) {
         next()

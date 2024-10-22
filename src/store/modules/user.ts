@@ -10,7 +10,7 @@ import type {
   ResponseData,
 } from "@/api/user/type";
 import type { UserState } from "./types/types";
-import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN, GET_USER_NAME } from "@/utils/token";
+import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
 import { constantRoute, asyncRoute, anyRoute } from "@/router/routes";
 
 import cloneDeep from "lodash/cloneDeep";
@@ -21,11 +21,11 @@ function filterAsyncRoute(asyncRoute: any, routes: any) {
   return asyncRoute.filter((item: any) => {
     if (routes.includes(item.name)) {
       if (item.children && item.children.length > 0) {
-        item.children = filterAsyncRoute(item.children, routes);
+        item.children = filterAsyncRoute(item.children, routes)
       }
-      return true;
+      return true
     }
-  });
+  })
 }
 
 const useUserStore = defineStore("User", {

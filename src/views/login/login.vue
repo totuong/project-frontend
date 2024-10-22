@@ -91,9 +91,6 @@ const onLogin = async () => {
       loading.startLoading("Logging in...");
       try {
         await useStore.userLogin(formLogin);
-        let redirect: string = route.query.redirect as string;
-        router.push({ path: redirect || "/" });
-        router.push("/");
         ElMessage({
           type: "success",
           message: "Login success",
