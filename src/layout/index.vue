@@ -1,72 +1,147 @@
-
 <script setup lang="ts">
-import Logo from './logo/index.vue'
-import Menu from './menu/index.vue'
-import TabBar from './tabbar/index.vue'
-import Main from './main/index.vue'
-import useLayOutSettingStore from '@/store/modules/setting'
-import useUserStore from '@/store/modules/user'
-import { useRoute } from 'vue-router'
+import Logo from "./logo/index.vue";
+import Menu from "./menu/index.vue";
+import TabBar from "./tabbar/index.vue";
+import Main from "./main/index.vue";
+import useLayOutSettingStore from "@/store/modules/setting";
+import useUserStore from "@/store/modules/user";
+import { useRoute } from "vue-router";
+import {
+  User,
+  BellFilled,
+  Message,
+  Memo,
+  Notification,
+  Search,
+} from "@element-plus/icons-vue";
+import { Icon } from "@iconify/vue";
+import { onMounted, ref } from "vue";
 
-let userStore = useUserStore()
-let $route = useRoute()
+let userStore = useUserStore();
+let $route = useRoute();
+const handleSelect = (item: Record<string, any>) => {
+  console.log(item);
+};
+interface LinkItem {
+  value: string;
+  link: string;
+}
+let timeout: ReturnType<typeof setTimeout>;
+const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
+  const results = queryString
+    ? links.value.filter(createFilter(queryString))
+    : links.value;
 
-let LayOutSettingStore = useLayOutSettingStore()
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    cb(results);
+  }, 3000 * Math.random());
+};
+const createFilter = (queryString: string) => {
+  return (restaurant: LinkItem) => {
+    return (
+      restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+    );
+  };
+};
+const links = ref<LinkItem[]>([]);
+const loadAll = () => {
+  return [
+    { value: "vue", link: "https://github.com/vuejs/vue" },
+    { value: "element", link: "https://github.com/ElemeFE/element" },
+    { value: "cooking", link: "https://github.com/ElemeFE/cooking" },
+    { value: "mint-ui", link: "https://github.com/ElemeFE/mint-ui" },
+    { value: "vuex", link: "https://github.com/vuejs/vuex" },
+    { value: "vue-router", link: "https://github.com/vuejs/vue-router" },
+    { value: "babel", link: "https://github.com/babel/babel" },
+  ];
+};
+onMounted(() => {
+  links.value = loadAll();
+});
+const state = ref("");
+let LayOutSettingStore = useLayOutSettingStore();
 </script>
 <template>
   <el-container class="layout-container-demo" style="height: 100vh">
+    <el-header class="flex flex-row items-center">
+      <div class="first">
+        <el-button size="large">Home</el-button>
+      </div>
+
+      <div class="second w-64 ml-20">
+        <el-autocomplete
+          class="w-44"
+          v-model="state"
+          size="large"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="Search..."
+          clearable
+          @select="handleSelect"
+        >
+          <template #prefix>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+        </el-autocomplete>
+      </div>
+      <div class="last ml-auto flex items-center">
+        <div class="button-feature mr-8 space-x-6">
+          <el-badge :value="3" class="item">
+            <el-button :icon="Memo" circle />
+          </el-badge>
+          <el-badge :value="3" class="item">
+            <el-button :icon="Message" circle />
+          </el-badge>
+          <el-badge :value="3" class="item">
+            <el-button :icon="BellFilled" circle />
+          </el-badge>
+          <el-badge :value="3" class="item">
+            <el-button :icon="Notification" circle />
+          </el-badge>
+        </div>
+        <el-dropdown class="flex" trigger="click">
+          <span class="flex flex-row items-center">
+            <Icon class="mr-3" icon="icon-park:avatar" width="26" height="26" />
+            <!-- v-if="username" -->
+            <p class="text-black">username</p>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu class="logout">
+              <el-dropdown-item>
+                <el-icon> <user /> </el-icon>Profile
+              </el-dropdown-item>
+              <el-dropdown-item
+                ><el-icon><Setting /></el-icon>Setting</el-dropdown-item
+              >
+              <el-dropdown-item divided>
+                <Icon
+                  icon="material-symbols:logout"
+                  width="20"
+                  height="20"
+                />Logout</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+    </el-header>
     <el-aside
+      v-if="false"
       width="200px"
       :class="{ isCollapse: LayOutSettingStore.isCollapse ? true : false }"
     >
-      <el-scrollbar>
-        <el-menu
-          :default-active="$route.path"
-          active-text-color="#fff"
-          background-color="#001529"
-          text-color="#959ea6"
-          :collapse="LayOutSettingStore.isCollapse"
-          :router="true"
-        >
-          <Logo />
-          <Menu :menuList="userStore.menuRoutes" />
-        </el-menu>
-      </el-scrollbar>
     </el-aside>
 
-    <el-container class="container">
-      <TabBar style="width: 100%" />
-      <el-main
-        :style="{
-          left: !LayOutSettingStore.isCollapse ? '200px' : '56px',
-          width: LayOutSettingStore.isCollapse
-            ? 'calc(100% - 56px)'
-            : 'calc(100% - 200px)',
-        }"
-      >
-        <el-scrollbar>
-          <Main />
-        </el-scrollbar>
+    <el-container class="w-full">
+      <el-main >
+        <Main />
       </el-main>
     </el-container>
   </el-container>
 </template>
 <style lang="scss" scoped>
-.layout-container-demo {
-  height: 100%;
-}
-.layout-container-demo .el-menu {
-  border-right: none;
-}
-.layout-container-demo .el-main {
-  position: absolute;
-  padding: 20px;
-  left: 200px;
-  top: 60px;
-  transition: all 0.3s;
-  width: calc(100% - $base-menu-width);
-  height: calc(100vh - 60px);
-}
 
 .el-aside {
   background-color: #001529 !important;
@@ -77,7 +152,5 @@ let LayOutSettingStore = useLayOutSettingStore()
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
 }
-.isCollapse {
-  width: 56px;
-}
+
 </style>

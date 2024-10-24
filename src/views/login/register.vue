@@ -221,9 +221,9 @@ const onRegister = async () => {
   });
 };
 </script>
-<style scoped lang="css">
+<style scoped lang="scss">
 @import url("../../styles/login.scss");
-::v-deep .el-link {
+:deep(.el-link) {
   margin-left: 10px !important;
   margin-bottom: 15px !important;
 }

@@ -109,6 +109,6 @@ const onForgotPassword = () => {
   emit("onChange");
 };
 </script>
-<style lang="css">
+<style lang="scss" scoped>
 @import url("../../styles/login.scss");
 </style>

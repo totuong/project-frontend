@@ -1,5 +1,5 @@
 export default {
-    title: 'Vue-Admin',
+    title: 'Home',
     logo: '/logo.png',
     logoHidden: true,
   }

@@ -73,6 +73,7 @@ const onBackLogin=()=>{
 }
 
 </script>
-<style lang="css">
-@import url("../../styles/login.scss");
+<style lang="css" scoped>
+@import "../../styles/login.scss";
+
 </style>

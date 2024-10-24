@@ -1,3 +1,5 @@
+import { permission } from "./modules/enums";
+
 /*
  * @Description: Stay hungry，Stay foolish
  * @Author: Huccct
@@ -19,7 +21,7 @@ export const constantRoute = [
   {
     path: "/",
     component: () => import("@/layout/index.vue"),
-    name: "layout",
+    name: "Home",
     meta: {
       title: "",
       hidden: false,
@@ -42,19 +44,21 @@ export const constantRoute = [
   },
   {
     path: "/user",
+    component: () => import("@/layout/index.vue"),
+    name: "user",
     meta: {
       title: "User",
       hidden: false,
       auth: false,
       icon: "",
     },
-    redirect: "/",
+    redirect: "/user/index",
     children: [
       {
-        path: "/",
+        path: "/user/index",
         component: () => import("@/views/user/index.vue"),
         meta: {
-          title: "Trang chủ",
+          title: "Trang chủ1",
           hidden: false,
           auth: false,
           icon: "HomeFilled",
@@ -62,6 +66,50 @@ export const constantRoute = [
       },
     ],
   },
+  // {
+  //   path: "/artist",
+  //   meta: {
+  //     title: "Artist",
+  //     hidden: false,
+  //     auth: false,
+  //     icon: "",
+  //   },
+  //   redirect: "/",
+  //   children: [
+  //     {
+  //       path: "/",
+  //       component: () => import("@/views/user/index.vue"),
+  //       meta: {
+  //         title: "Trang chủ",
+  //         hidden: false,
+  //         auth: true,
+  //         icon: "HomeFilled",
+  //       },
+  //     },
+  //   ],
+  // },
+  // {
+  //   path: "/admin",
+  //   meta: {
+  //     title: "Admin",
+  //     hidden: false,
+  //     auth: false,
+  //     icon: "",
+  //   },
+  //   redirect: "/",
+  //   children: [
+  //     {
+  //       path: "/",
+  //       component: () => import("@/views/user/index.vue"),
+  //       meta: {
+  //         title: "Trang chủ",
+  //         hidden: false,
+  //         auth: true,
+  //         icon: "HomeFilled",
+  //       },
+  //     },
+  //   ],
+  // },
   {
     path: "/404",
     component: () => import("@/views/404/index.vue"),
