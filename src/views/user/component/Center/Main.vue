@@ -2,7 +2,7 @@
   <div>
     <!-- <el-main class="flex-auto"> -->
       <!-- <el-scrollbar class="h-full"> -->
-        <div class="mt-4 px-64">
+        <div class="mt-4 px-40">
           <CreatePost />
           <!-- Posts Section -->
           <PostMain />

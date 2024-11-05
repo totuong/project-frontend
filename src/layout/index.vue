@@ -148,7 +148,7 @@ let LayOutSettingStore = useLayOutSettingStore();
   transition: all 0.3s;
 }
 .el-header {
-  background-color: #fff !important;
+  background-color: #7a2f2f !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
 }
