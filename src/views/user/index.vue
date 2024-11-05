@@ -1,135 +1,26 @@
-<script setup lang="ts"></script>
-
-
 <template>
   <div class="common-layout h-full">
-    <el-container>
-      <el-aside class="w-[200px] h-full">
-        <el-scrollbar>
-          <el-menu :default-openeds="['1', '3']">
-            <el-sub-menu index="1">
-              <template #title>
-                <el-icon><message /></el-icon>Navigator One
-              </template>
-              <el-menu-item-group>
-                <template #title>Group 1</template>
-                <el-menu-item index="1-1">Option 1</el-menu-item>
-                <el-menu-item index="1-2">Option 2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group 2">
-                <el-menu-item index="1-3">Option 3</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="1-4">
-                <template #title>Option4</template>
-                <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
-              </el-sub-menu>
-            </el-sub-menu>
-            <el-sub-menu index="2">
-              <template #title>
-                <el-icon><icon-menu /></el-icon>Navigator Two
-              </template>
-              <el-menu-item-group>
-                <template #title>Group 1</template>
-                <el-menu-item index="2-1">Option 1</el-menu-item>
-                <el-menu-item index="2-2">Option 2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group 2">
-                <el-menu-item index="2-3">Option 3</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="2-4">
-                <template #title>Option 4</template>
-                <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-              </el-sub-menu>
-            </el-sub-menu>
-            <el-sub-menu index="3">
-              <template #title>
-                <el-icon><setting /></el-icon>Navigator Three
-              </template>
-              <el-menu-item-group>
-                <template #title>Group 1</template>
-                <el-menu-item index="3-1">Option 1</el-menu-item>
-                <el-menu-item index="3-2">Option 2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group 2">
-                <el-menu-item index="3-3">Option 3</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="3-4">
-                <template #title>Option 4</template>
-                <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-              </el-sub-menu>
-            </el-sub-menu>
-          </el-menu>
+    <el-container class="w-full">
+      <SideLeft />
+      <div class="flex-auto overflow-y-auto">
+        <el-scrollbar class="h-full">
+          <Main />
         </el-scrollbar>
-      </el-aside>
-
-      <el-main  class="flex-auto">
-        <el-scrollbar>
-          <el-table>
-            <el-table-column prop="date" label="Date" width="140" />
-            <el-table-column prop="name" label="Name" width="120" />
-            <el-table-column prop="address" label="Address" />
-          </el-table> </el-scrollbar
-      ></el-main>
-      <el-aside class="w-[200px] h-full">
-        <el-scrollbar>
-          <el-menu :default-openeds="['1', '3']">
-            <el-sub-menu index="1">
-              <template #title>
-                <el-icon><message /></el-icon>Navigator One
-              </template>
-              <el-menu-item-group>
-                <template #title>Group 1</template>
-                <el-menu-item index="1-1">Option 1</el-menu-item>
-                <el-menu-item index="1-2">Option 2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group 2">
-                <el-menu-item index="1-3">Option 3</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="1-4">
-                <template #title>Option4</template>
-                <el-menu-item index="1-4-1">Option 4-1</el-menu-item>
-              </el-sub-menu>
-            </el-sub-menu>
-            <el-sub-menu index="2">
-              <template #title>
-                <el-icon><icon-menu /></el-icon>Navigator Two
-              </template>
-              <el-menu-item-group>
-                <template #title>Group 1</template>
-                <el-menu-item index="2-1">Option 1</el-menu-item>
-                <el-menu-item index="2-2">Option 2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group 2">
-                <el-menu-item index="2-3">Option 3</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="2-4">
-                <template #title>Option 4</template>
-                <el-menu-item index="2-4-1">Option 4-1</el-menu-item>
-              </el-sub-menu>
-            </el-sub-menu>
-            <el-sub-menu index="3">
-              <template #title>
-                <el-icon><setting /></el-icon>Navigator Three
-              </template>
-              <el-menu-item-group>
-                <template #title>Group 1</template>
-                <el-menu-item index="3-1">Option 1</el-menu-item>
-                <el-menu-item index="3-2">Option 2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="Group 2">
-                <el-menu-item index="3-3">Option 3</el-menu-item>
-              </el-menu-item-group>
-              <el-sub-menu index="3-4">
-                <template #title>Option 4</template>
-                <el-menu-item index="3-4-1">Option 4-1</el-menu-item>
-              </el-sub-menu>
-            </el-sub-menu>
-          </el-menu>
-        </el-scrollbar>
-      </el-aside>
+      </div> 
+      <SideRight />
     </el-container>
   </div>
 </template>
+<script setup lang="ts">
+import Main from "./component/Center/Main.vue";
+import SideLeft from "./component/LeftSide/SideLeft.vue";
+import SideRight from "./component/RightSide/SideRight.vue";
+</script>
+
 <style lang="scss">
+.common-layout {
+  display: flex;
+  height: calc(100vh - 60px);
+}
 
 </style>

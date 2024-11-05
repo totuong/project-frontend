@@ -64,14 +64,16 @@ let LayOutSettingStore = useLayOutSettingStore();
 </script>
 <template>
   <el-container class="layout-container-demo" style="height: 100vh">
-    <el-header class="flex flex-row items-center">
+    <el-header class="flex flex-row items-center top-0 z-10 fixed w-full">
       <div class="first">
-        <el-button size="large">Home</el-button>
+        <el-button size="large"
+          ><el-icon class="mr-2"><HomeFilled /></el-icon>Home</el-button
+        >
       </div>
 
       <div class="second w-64 ml-20">
         <el-autocomplete
-          class="w-44"
+          class="w-[240px]"
           v-model="state"
           size="large"
           :fetch-suggestions="querySearchAsync"
@@ -133,18 +135,16 @@ let LayOutSettingStore = useLayOutSettingStore();
       :class="{ isCollapse: LayOutSettingStore.isCollapse ? true : false }"
     >
     </el-aside>
-
-    <el-container class="w-full">
-      <el-main >
+    <el-container class="w-full mt-[60px]">
+      <el-main>
         <Main />
       </el-main>
     </el-container>
   </el-container>
 </template>
 <style lang="scss" scoped>
-
 .el-aside {
-  background-color: #001529 !important;
+  // background-color: #001529 !important;
   transition: all 0.3s;
 }
 .el-header {
@@ -152,5 +152,7 @@ let LayOutSettingStore = useLayOutSettingStore();
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
 }
-
+.el-main{
+  padding: 0;
+}
 </style>
