@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div
       class="post bg-slate-50 p-4 mb-4 shadow-md rounded relative w-full h-auto"
     >
@@ -31,19 +30,23 @@
         <el-button icon="Share">Share</el-button>
       </div>
       <div class="post-comments bg-gray-100 p-4 rounded">
-        <div v-for="(comment, idx) in data.comments" :key="idx" class="comment-item mb-2">
-        <div class="flex items-center mb-1">
-          <el-avatar :src="comment.avatar" size="small" />
-          <div class="ml-2">
-            <div class="font-semibold">{{ comment.userName }}</div>
-            <div class="text-gray-500 text-xs">{{ comment.timestamp }}</div>
+        <div
+          v-for="(comment, idx) in data.comments"
+          :key="idx"
+          class="comment-item mb-2"
+        >
+          <div class="flex items-center mb-1">
+            <el-avatar :src="comment.avatar" size="small" />
+            <div class="ml-2">
+              <div class="font-semibold">{{ comment.userName }}</div>
+              <div class="text-gray-500 text-xs">{{ comment.timestamp }}</div>
+            </div>
           </div>
+          <div class="comment-content">{{ comment.content }}</div>
         </div>
-        <div class="comment-content">{{ comment.content }}</div>
       </div>
-      </div>
+      
     </div>
-  </div>
 </template>
 <script setup lang="ts">
 import { defineProps } from "vue";

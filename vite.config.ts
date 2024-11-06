@@ -28,7 +28,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       }),
       vue(),
     ],
-    resolve: { alias: { "@": path.resolve("./src") } },
+    resolve: { alias: {   "@": path.resolve(__dirname, "src") } },
     css: {
       preprocessorOptions: {
         scss: {
