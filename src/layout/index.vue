@@ -5,7 +5,7 @@ import TabBar from "./tabbar/index.vue";
 import Main from "./main/index.vue";
 import useLayOutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
-import { useRoute } from "vue-router";
+import { useRoute ,useRouter} from "vue-router";
 import {
   User,
   BellFilled,
@@ -18,7 +18,9 @@ import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
 
 let userStore = useUserStore();
-let $route = useRoute();
+
+
+const router = useRouter();
 const handleSelect = (item: Record<string, any>) => {
   console.log(item);
 };
@@ -44,6 +46,13 @@ const createFilter = (queryString: string) => {
     );
   };
 };
+const handleProfileClick = () => {
+  router.push("/user/profile"); // Điều hướng tới /user/profile
+};
+
+const handleHomeClick = () => {
+  router.push("/user/index"); // Điều hướng tới /user/profile
+};
 const links = ref<LinkItem[]>([]);
 const loadAll = () => {
   return [
@@ -66,7 +75,7 @@ let LayOutSettingStore = useLayOutSettingStore();
   <el-container class="layout-container-demo" style="height: 100vh">
     <el-header class="flex flex-row items-center top-0 z-10 fixed w-full">
       <div class="first">
-        <el-button size="large"
+        <el-button size="large" @click="handleHomeClick"
           ><el-icon class="mr-2"><HomeFilled /></el-icon>Home</el-button
         >
       </div>
@@ -111,7 +120,7 @@ let LayOutSettingStore = useLayOutSettingStore();
           </span>
           <template #dropdown>
             <el-dropdown-menu class="logout">
-              <el-dropdown-item>
+              <el-dropdown-item @click="handleProfileClick">
                 <el-icon> <user /> </el-icon>Profile
               </el-dropdown-item>
               <el-dropdown-item

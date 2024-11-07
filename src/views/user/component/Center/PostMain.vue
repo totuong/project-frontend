@@ -18,15 +18,15 @@ import Post from "./Post.vue";
 const posts = ref([
   {
     userName: "John Doe",
-    avatar: "https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp",
+    avatar: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
     timestamp: "2 hours ago",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    media: "https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp",
+    media: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
     likes: 123,
     comments: [
       {
         userName: "Jane Smith",
-        avatar: "https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp",
+        avatar: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
         timestamp: "1 hour ago",
         content: "This is a comment.",
       },
@@ -34,15 +34,15 @@ const posts = ref([
   },
   {
     userName: "John Doe",
-    avatar: "https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp",
+    avatar: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
     timestamp: "2 hours ago",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    media: "https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp",
+    media: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
     likes: 123,
     comments: [
       {
         userName: "Jane Smith",
-        avatar: "https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp",
+        avatar: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
         timestamp: "1 hour ago",
         content: "This is a comment.",
       },

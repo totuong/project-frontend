@@ -64,6 +64,16 @@ export const constantRoute = [
           icon: "HomeFilled",
         },
       },
+      {
+        path: "/user/profile",
+        component: () => import("@/views/user/component/Profile/profile.vue"),
+        meta: {
+          title: "Profile User",
+          hidden: false,
+          auth: false,
+          icon: "HomeFilled",
+        },
+      }
     ],
   },
   // {
