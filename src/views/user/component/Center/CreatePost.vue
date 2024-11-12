@@ -63,6 +63,6 @@ const updateContent = (newContent: string) => {
   }
   .quill-editor {
     min-height: 200px;
-  }
+ }
 }
 </style>
