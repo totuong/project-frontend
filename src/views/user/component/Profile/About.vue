@@ -1,8 +1,8 @@
 <template>
   <div class="about-section mt-4">
-    <p><strong>Hometown:</strong> City, Country</p>
-    <p><strong>Work:</strong> Company</p>
-    <p><strong>Education:</strong> University</p>
+    <p><strong>Tham gia vào :</strong> 10/10/2024</p>
+    <p><strong>Rate:</strong> 4.7</p>
+    <p><strong>Vai trò:</strong> Nghệ sĩ tự do</p>
   </div>
 </template>
 

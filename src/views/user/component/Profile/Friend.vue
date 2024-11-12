@@ -29,6 +29,102 @@ const friends = ref([
     avatar:
       "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
   },
+  {
+    id: 3,
+    name: "Friend 3",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 4,
+    name: "Friend 4",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 5,
+    name: "Friend 5",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 6,
+    name: "Friend 6",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 1,
+    name: "Friend 1",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 2,
+    name: "Friend 2",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 3,
+    name: "Friend 3",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 4,
+    name: "Friend 4",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 5,
+    name: "Friend 5",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 6,
+    name: "Friend 6",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 1,
+    name: "Friend 1",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 2,
+    name: "Friend 2",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 3,
+    name: "Friend 3",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 4,
+    name: "Friend 4",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 5,
+    name: "Friend 5",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  },
+  {
+    id: 6,
+    name: "Friend 6",
+    avatar:
+      "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+  }
 ]);
 </script>
 <style></style>

@@ -13,6 +13,7 @@ import {
   Memo,
   Notification,
   Search,
+  Lock,
 } from "@element-plus/icons-vue";
 import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
@@ -48,6 +49,9 @@ const createFilter = (queryString: string) => {
 };
 const handleProfileClick = () => {
   router.push("/user/profile"); // Điều hướng tới /user/profile
+};
+const handleChangePasswordClick = () => {
+  router.push("/user/change-password"); // Điều hướng tới /user/profile
 };
 
 const handleHomeClick = () => {
@@ -123,6 +127,9 @@ let LayOutSettingStore = useLayOutSettingStore();
               <el-dropdown-item @click="handleProfileClick">
                 <el-icon> <user /> </el-icon>Profile
               </el-dropdown-item>
+              <el-dropdown-item @click="handleChangePasswordClick"
+                ><el-icon><Lock /></el-icon>Change Password</el-dropdown-item
+              >
               <el-dropdown-item
                 ><el-icon><Setting /></el-icon>Setting</el-dropdown-item
               >

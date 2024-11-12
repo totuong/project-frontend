@@ -73,6 +73,16 @@ export const constantRoute = [
           auth: false,
           icon: "HomeFilled",
         },
+      },
+      {
+        path: "/user/change-password",
+        component: () => import("@/views/account/ChangePassword.vue"),
+        meta: {
+          title: "Change Password",
+          hidden: false,
+          auth: false,
+          icon: "HomeFilled",
+        },
       }
     ],
   },
