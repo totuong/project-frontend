@@ -83,6 +83,16 @@ export const constantRoute = [
           auth: false,
           icon: "HomeFilled",
         },
+      },
+      {
+        path: "/user/order",
+        component: () => import("@/views/account/Order.vue"),
+        meta: {
+          title: "Danh sách đơn",
+          hidden: false,
+          auth: false,
+          icon: "HomeFilled",
+        },
       }
     ],
   },

@@ -3,9 +3,12 @@ import Logo from "./logo/index.vue";
 import Menu from "./menu/index.vue";
 import TabBar from "./tabbar/index.vue";
 import Main from "./main/index.vue";
+import Noti from "./Notification/index.vue";
+import Messenger from "./Messenger/index.vue";
+import Order from "./Order/index.vue";
 import useLayOutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
-import { useRoute ,useRouter} from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   User,
   BellFilled,
@@ -19,8 +22,6 @@ import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
 
 let userStore = useUserStore();
-
-
 const router = useRouter();
 const handleSelect = (item: Record<string, any>) => {
   console.log(item);
@@ -30,6 +31,7 @@ interface LinkItem {
   link: string;
 }
 let timeout: ReturnType<typeof setTimeout>;
+
 const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
   const results = queryString
     ? links.value.filter(createFilter(queryString))
@@ -102,19 +104,10 @@ let LayOutSettingStore = useLayOutSettingStore();
         </el-autocomplete>
       </div>
       <div class="last ml-auto flex items-center">
-        <div class="button-feature mr-8 space-x-6">
-          <el-badge :value="3" class="item">
-            <el-button :icon="Memo" circle />
-          </el-badge>
-          <el-badge :value="3" class="item">
-            <el-button :icon="Message" circle />
-          </el-badge>
-          <el-badge :value="3" class="item">
-            <el-button :icon="BellFilled" circle />
-          </el-badge>
-          <el-badge :value="3" class="item">
-            <el-button :icon="Notification" circle />
-          </el-badge>
+        <div class="flex flex-row mr-8 space-x-6">
+          <Order />
+          <Messenger />
+          <Noti />
         </div>
         <el-dropdown class="flex" trigger="click">
           <span class="flex flex-row items-center">
@@ -168,7 +161,7 @@ let LayOutSettingStore = useLayOutSettingStore();
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
 }
-.el-main{
+.el-main {
   padding: 0;
 }
 </style>

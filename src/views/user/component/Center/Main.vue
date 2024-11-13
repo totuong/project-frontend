@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class=" flex content-center justify-center">
     <!-- <el-main class="flex-auto"> -->
       <!-- <el-scrollbar class="h-full"> -->
-        <div class="mt-4 px-40">
+        <div class="mt-4 min-w-[350px] w-4/5 flex-col ">
           <CreatePost />
           <!-- Posts Section -->
           <PostMain />
