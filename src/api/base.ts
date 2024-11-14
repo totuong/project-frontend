@@ -1,5 +1,13 @@
-export type Result = {
+// export type Result = {
+//   success: boolean;
+//   data?: any;
+//   meta?: object
+// };
+
+export interface Result {
+  message?: string;
+  ok?: boolean;
   success: boolean;
-  data?: any;
-  meta?: object
-};
+  meta?: object;
+  statusCode?: number;
+}

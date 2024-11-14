@@ -1,143 +1,105 @@
 import { defineStore } from "pinia";
-import { store } from "@/store";
-import { type userType } from "./types";
-import { routerArrays } from "@/layout/types";
-import { router, resetRouter } from "@/router";
-import { storageLocal } from "@pureadmin/utils";
-import { getLogin, refreshTokenApi, getUser, verifyLoginGoogle } from '@/api/user'
-import { type  UserResult,type  RefreshTokenResult } from "@/api/user";
-import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
-import { type DataInfo, setToken, removeToken, userKey, setAccessToken } from '@/utils/auth'
-import { message } from '@/utils/message'
+import router from "@/router";
+import { reqLogin, reqUserInfo, reqLogOut, reqRegister } from "@/api/user";
+import type { RouteRecordRaw } from "vue-router";
+import type {
+  LoginFormData,
+  RegisterFormData,
+  TokenResult,
+  UserResult,
+  ResponseData,
+} from "@/api/user/type";
+import type { UserState } from "./types/types";
+import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
+import { constantRoute, asyncRoute, anyRoute } from "@/router/routes";
 
-export const useUserStore = defineStore({
-  id: "pure-user",
-  state: (): userType => ({
-    // 用户名
-    username: storageLocal().getItem<DataInfo<number>>(userKey)?.username ?? "",
-    // 页面级别权限
-    roles: storageLocal().getItem<DataInfo<number>>(userKey)?.roles ?? [],
-    // 前端生成的验证码（按实际需求替换）
-    verifyCode: "",
-    // 判断登录页面显示哪个组件（0：登录（默认）、1：手机登录、2：二维码登录、3：注册、4：忘记密码）
-    currentPage: 0,
-    // 是否勾选了登录页的免登录
-    isRemembered: false,
-    // 登录页的免登录存储几天，默认7天
-    loginDay: 7,
-    phone: '',
-    email: ''
-  }),
-  actions: {
-    /** 存储用户名 */
-    SET_USERNAME(username: string) {
-      this.username = username;
-    },
-    SET_PHONE (phone: string) {
-      this.phone = phone
-    },
-    SET_EMAIL (email: string) {
-      this.email = email
-    },
-    /** 存储角色 */
-    SET_ROLES(roles: Array<string>) {
-      this.roles = roles;
-    },
-    /** 存储前端生成的验证码 */
-    SET_VERIFYCODE(verifyCode: string) {
-      this.verifyCode = verifyCode;
-    },
-    /** 存储登录页面显示哪个组件 */
-    SET_CURRENTPAGE(value: number) {
-      this.currentPage = value;
-    },
-    /** 存储是否勾选了登录页的免登录 */
-    SET_ISREMEMBERED(bool: boolean) {
-      this.isRemembered = bool;
-    },
-    /** 设置登录页的免登录存储几天 */
-    SET_LOGINDAY(value: number) {
-      this.loginDay = Number(value);
-    },
-    /** 登入 */
-    async loginByUsername(data) {
-      return new Promise<UserResult>((resolve, reject) => {
-        getLogin(data)
-          .then(data => {
-            if (data.success) {
-              const accessToken = data.data
-              setAccessToken(accessToken)
-              getUser().then(result =>{
-                setToken(result.data, accessToken)
-                resolve(result);
-              })
-            } else {
-              message(data.data, { type: 'error' })
-              reject(data.data)
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
-    async loginByToken (accessToken: string) {
-      return new Promise<UserResult>((resolve, reject) => {
-        setAccessToken(accessToken)
-        getUser().then(result => {
-          setToken(result.data, accessToken)
-          resolve(result)
-        }).catch(error=>{
-          reject(error)
-        })
-      })
-    },
+import cloneDeep from "lodash/cloneDeep";
 
-    async loginByGoogle(data: object) {
-      return new Promise<UserResult>((resolve, reject) => {
-        verifyLoginGoogle(data)
-          .then(data => {
-            if (data) {
-              const accessToken = data.data
-              setAccessToken(accessToken)
-              getUser().then(result =>{
-                setToken(result.data, accessToken)
-                resolve(result);
-              })
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    },
-    /** 前端登出（不调用接口） */
-    logOut() {
-      this.username = "";
-      this.roles = [];
-      removeToken();
-      useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
-      resetRouter();
-      router.push("/login");
-    },
-    /** 刷新`token` */
-    async handRefreshToken(data) {
-      return new Promise<RefreshTokenResult>((resolve, reject) => {
-        refreshTokenApi(data)
-          .then(data => {
-            if (data) {
-              setToken(data.data);
-              resolve(data);
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
+let dynamicRoutes: RouteRecordRaw[] = [];
+
+function filterAsyncRoute(asyncRoute: any, routes: any) {
+  return asyncRoute.filter((item: any) => {
+    if (routes.includes(item.name)) {
+      if (item.children && item.children.length > 0) {
+        item.children = filterAsyncRoute(item.children, routes)
+      }
+      return true
     }
-  }
+  })
+}
+
+const useUserStore = defineStore("User", {
+  state: (): UserState => {
+    return {
+      token: GET_TOKEN()!,
+      menuRoutes: constantRoute,
+      username: "",
+      avatar: "",
+      buttons: [],
+      role: 1,
+    };
+  },
+  actions: {
+    async userLogin(data: LoginFormData) {
+      const res: TokenResult = await reqLogin(data);
+      if (res.success === true) {
+        this.token = res.data as string;
+        SET_TOKEN(res.data as string);
+        return "ok";
+      } else {
+        return Promise.reject(new Error(res.data as string));
+      }
+    },
+
+    async userRegister(data: RegisterFormData) {
+      const res: ResponseData = await reqRegister(data);
+      if (res.statusCode === 200) {
+        return "ok";
+      } else {
+        return Promise.reject(
+          new Error(res.data ? JSON.stringify(res.data) : "error")
+        );
+      }
+    },
+
+    async userInfo() {
+      const res: UserResult = await await reqUserInfo();
+
+      if (res.success === true) {
+        this.username = res.data.username as string;
+        this.avatar = res.data.avatar as string;
+        this.role = res.data.role;
+
+        this.menuRoutes = [...constantRoute, anyRoute];
+        dynamicRoutes = [anyRoute];
+        dynamicRoutes.forEach((route) => {
+          router.addRoute(route);
+        });
+        return "ok";
+      } else {
+        return Promise.reject(new Error(res.statusCode as unknown as string));
+      }
+    },
+
+    async userLogout() {
+      // const res = await reqLogOut();
+      // if (res.code === 200) {
+      //   this.token = "";
+      //   this.username = "";
+      //   this.avatar = "";
+      REMOVE_TOKEN();
+      // dynamicRoutes.forEach((route) => {
+      //   if (route.name) {
+      router.push("/");
+      //       }
+      //     });
+      //   } else {
+      //     return Promise.reject(new Error(res.message));
+      //   }
+    },
+  },
+
+  getters: {},
 });
 
-export function useUserStoreHook() {
-  return useUserStore(store);
-}
+export default useUserStore;
