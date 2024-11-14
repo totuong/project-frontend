@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import router from "@/router";
-import { reqLogin, reqUserInfo, reqLogOut, reqRegister } from "@/api/user";
+import { reqLogin, reqUserInfo, reqLogOut, reqRegister } from "@/api/auth";
 import type { RouteRecordRaw } from "vue-router";
 import type {
   LoginFormData,
@@ -8,7 +8,7 @@ import type {
   TokenResult,
   UserResult,
   ResponseData,
-} from "@/api/user/type";
+} from "@/types/api/auth";
 import type { UserState } from "./types/types";
 import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
 import { constantRoute, asyncRoute, anyRoute } from "@/router/routes";

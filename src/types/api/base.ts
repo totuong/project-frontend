@@ -5,9 +5,10 @@
 // };
 
 export interface Result {
-  message?: string;
-  ok?: boolean;
-  success: boolean;
-  meta?: object;
-  statusCode?: number;
-}
+    message?: string;
+    ok?: boolean;
+    success: boolean;
+    meta?: object;
+    statusCode?: number;
+  }
+  
