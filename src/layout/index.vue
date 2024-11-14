@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Logo from "./logo/index.vue";
-import Menu from "./menu/index.vue";
-import TabBar from "./tabbar/index.vue";
+
 import Main from "./main/index.vue";
 import Noti from "./Notification/index.vue";
 import Messenger from "./Messenger/index.vue";
@@ -11,12 +9,10 @@ import useUserStore from "@/store/modules/user";
 import { useRoute, useRouter } from "vue-router";
 import {
   User,
-  BellFilled,
-  Message,
-  Memo,
-  Notification,
   Search,
   Lock,
+  HomeFilled,
+  Setting,
 } from "@element-plus/icons-vue";
 import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
@@ -86,9 +82,9 @@ let LayOutSettingStore = useLayOutSettingStore();
         >
       </div>
 
-      <div class="second w-64 ml-20">
+      <div class="second w-64 ml-20 rounded-xl	">
         <el-autocomplete
-          class="w-[240px]"
+          class="w-[240px] "
           v-model="state"
           size="large"
           :fetch-suggestions="querySearchAsync"

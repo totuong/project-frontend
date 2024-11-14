@@ -19,7 +19,7 @@ enum API {
   LOGIN_URL = '/auth/login',
   REGISTER_URL = '/auth/register',
   USERINFO_URL = '/auth/info',
-  LOGOUT_URL = '/admin/acl/index/logout',
+  LOGOUT_URL = '/auth/logout',
 }
 
 export const reqLogin = (data: LoginFormData) =>
