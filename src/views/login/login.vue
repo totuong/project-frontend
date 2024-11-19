@@ -90,12 +90,13 @@ const onLogin = async () => {
     if (valid) {
       loading.startLoading("Logging in...");
       try {
-        await useStore.userLogin(formLogin);
+        // await useStore.userLogin(formLogin);
+        router.push("/user")
         ElMessage({
           type: "success",
           message: "Login success",
         });
-        loading1.value = false;
+
       } catch (error) {
         console.error(error);
         ElMessage.error({ message: "Oops, login failed :(" });
@@ -110,5 +111,5 @@ const onForgotPassword = () => {
 };
 </script>
 <style lang="scss" scoped>
-@import url("../../styles/login.scss");
+@import url("../../style/login.scss");
 </style>

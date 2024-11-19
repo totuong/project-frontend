@@ -7,8 +7,12 @@ export type User = {
   mobile: string;
   role: number;
 };
-export type UserResult = {
-  success: boolean;
-  statusCode?: number;
-  data: User;
+export type Profile = {
+  id: string;
+  userId: string;
+  friendsCount: number;
+  followersCount: number;
+  followingCount: number;
+  postsCount: number;
+  isFollowing: boolean;
 };

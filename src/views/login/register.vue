@@ -71,8 +71,8 @@
           <el-col :span="11">
             <el-form-item label="Vai trò">
               <el-radio-group fill="#409eee" v-model="formRegister.role">
-                <el-radio border value="1">Người dùng</el-radio>
-                <el-radio border value="2">Nghệ sĩ</el-radio>
+                <el-radio border value="user">Người dùng</el-radio>
+                <el-radio border value="artist">Nghệ sĩ</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -155,7 +155,7 @@ const formRegister = reactive({
   confirmPassword: "",
   email: "",
   mobile: "",
-  role: 0,
+  role: "user",
 });
 const termsConditions = ref(false);
 
@@ -222,7 +222,7 @@ const onRegister = async () => {
 };
 </script>
 <style scoped lang="scss">
-@import url("../../styles/login.scss");
+@import url("../../style/login.scss");
 :deep(.el-link) {
   margin-left: 10px !important;
   margin-bottom: 15px !important;

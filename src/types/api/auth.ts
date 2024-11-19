@@ -10,7 +10,7 @@ export interface RegisterFormData {
   fullName: string;
   email: string;
   mobile: string;
-  role: number;
+  role: string;
 }
 
 export interface ResponseData {
@@ -28,7 +28,7 @@ export type User = {
   fullName: string;
   email: string;
   mobile: string;
-  role: number;
+  role: string;
 };
 
 export type UserResult = {

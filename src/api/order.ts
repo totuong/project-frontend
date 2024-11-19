@@ -9,12 +9,12 @@ enum API {
   ORDER_DELETE_URL = `${PREDIX}/delete`,
 }
 
-export const reqLogin = (data: LoginFormData) =>
+export const getOrder = (data: LoginFormData) =>
   request.post<any, TokenResult>(API.LOGIN_URL, data);
 
-export const reqRegister = (data: RegisterFormData) =>
+export const gerOrderDe = (data: RegisterFormData) =>
   request.post<any, ResponseData>(API.REGISTER_URL, data);
 
-export const reqUserInfo = () => request.get<any, UserResult>(API.USERINFO_URL);
+export const deleteOrder = () => request.get<any, UserResult>(API.USERINFO_URL);
 
 export const reqLogOut = () => request.post<any, any>(API.LOGOUT_URL);

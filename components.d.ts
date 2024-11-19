@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ChatBox: typeof import('./src/components/ChatBox/index.vue')['default']
     CustomColumnChooser: typeof import("./src/components/base/table/CustomColumnChooser.vue")["default"]
     CustomSelect: typeof import('./src/components/CustomSelect/index.vue')['default']
     DateRange: typeof import('./src/components/DateRange/index.vue')['default']
@@ -17,7 +18,7 @@ declare module 'vue' {
     ElBotton: typeof import("element-plus/es")["ElBotton"]
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
-    ElCheckbox: typeof import("element-plus/es")["ElCheckbox"]
+    ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElCheckboxGroup: typeof import("element-plus/es")["ElCheckboxGroup"]
     ElCol: typeof import('element-plus/es')['ElCol']
     ElContainer: typeof import('element-plus/es')['ElContainer']
@@ -34,7 +35,7 @@ declare module 'vue' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElLink: typeof import("element-plus/es")["ElLink"]
+    ElLink: typeof import('element-plus/es')['ElLink']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElMenu: typeof import("element-plus/es")["ElMenu"]
     ElMenuItem: typeof import("element-plus/es")["ElMenuItem"]
@@ -43,8 +44,8 @@ declare module 'vue' {
     ElPageHeader: typeof import("element-plus/es")["ElPageHeader"]
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopover: typeof import('element-plus/es')['ElPopover']
-    ElRadio: typeof import("element-plus/es")["ElRadio"]
-    ElRadioGroup: typeof import("element-plus/es")["ElRadioGroup"]
+    ElRadio: typeof import('element-plus/es')['ElRadio']
+    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRate: typeof import('element-plus/es')['ElRate']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']

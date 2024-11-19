@@ -1,27 +1,27 @@
-import {ElLoading} from "element-plus";
+import { ElLoading } from "element-plus";
 
 const loadingComposable = () => {
-    let loading: any = null;
+  let loading: any = null;
 
-    const startLoading = (text: string = 'Loading...') => {
-        loading = ElLoading.service({
-            lock: true,
-            text: text,
-            background: 'rgba(0, 0, 0, 0.7)',
-        })
-    };
+  const startLoading = (text: string = "Loading...") => {
+    loading = ElLoading.service({
+      lock: true,
+      text: text,
+      background: "rgba(0, 0, 0, 0.7)",
+    });
+  };
 
-    const stopLoading = () => {
-        setTimeout(() => {
-            loading.close()
-        }, 2000)
-    };
+  const stopLoading = () => {
+    setTimeout(() => {
+      loading.close();
+    }, 2000);
+  };
 
-    return {loading, startLoading, stopLoading};
-}
+  return { loading, startLoading, stopLoading };
+};
 
 function useLoading() {
-    return loadingComposable();
+  return loadingComposable();
 }
 
-export {useLoading};
+export { useLoading };
