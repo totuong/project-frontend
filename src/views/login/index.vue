@@ -1,8 +1,8 @@
 <template>
-  <div class="h-screen relative">
-    <div class="bg-[#c9d6ff] flex flex-col items-center justify-center w-full ">
-      <h1 class="welcome text-2xl my-10">
-        Chào mừng đến với nền tảng kết nối Nghệ sĩ với chúng tôi
+  <div class="h-screen flex flex-col">
+    <div class="bg-[#c9d6ff] flex flex-col items-center justify-center w-full h-full ">
+      <h1 class="welcome text-2xl font-bold my-10 text-red-500">
+        CHÀO MỪNG ĐẾN VỚI NỀN TẢNG KẾT NỐI NGHỆ SĨ CỦA CHÚNG TÔI
       </h1>
       <el-card
         :class="{ container: true, active: isContainerActive }"
@@ -39,8 +39,8 @@
         </div>
       </el-card>
     </div>
-    <div class="absolute bottom-2.5">
-      <div class="w-full text-center">
+    <div class="content-end w-full h-fit">
+      <div class="text-center p-4">
         <div
           class="flex flex-wrap justify-center space-x-3 text-gray-500 text-sm mb-4"
         >

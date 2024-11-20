@@ -5,6 +5,22 @@
       <div class="flex-1 w-full">
         <div class="header flex items-center space-x-2 bg-gray-100 p-2 rounded">
           <Icon icon="mdi:account-multiple-plus" class="text-black" />
+          <span class="font-semibold">Top nghệ sĩ</span>
+        </div>
+        <div class="suggested-friends-list mt-2">
+          <div class="suggested-friend-item flex items-center space-x-2 py-2">
+            <Icon icon="carbon:user-avatar-filled-alt" class="text-black w-8 h-8" />
+            <span>Hoàng Nam</span>
+          </div>
+          <div class="suggested-friend-item flex items-center space-x-2 py-2">
+            <Icon icon="carbon:user-avatar-filled-alt" class="text-black w-8 h-8" />
+            <span>Phương Anh</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 w-full">
+        <div class="header flex items-center space-x-2 bg-gray-100 p-2 rounded">
+          <Icon icon="mdi:account-multiple-plus" class="text-black" />
           <span class="font-semibold">Gợi ý kết bạn</span>
         </div>
         <div class="suggested-friends-list mt-2">

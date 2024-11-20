@@ -70,6 +70,7 @@ declare module 'vue' {
     MSelectbox: typeof import("./src/components/base/input/MSelectbox.vue")["default"]
     MTable: typeof import("./src/components/base/table/MTable.vue")["default"]
     MTextArea: typeof import("./src/components/base/input/MTextArea.vue")["default"]
+    Post: typeof import('./src/components/Post/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Src: typeof import("./src/components/Category/src/index.vue")["default"]

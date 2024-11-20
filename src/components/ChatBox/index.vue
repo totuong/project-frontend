@@ -1,7 +1,7 @@
 <template>
   <div v-if="isChatVisible" class="chat-box">
     <div
-      class="chat-header flex justify-between items-center p-3 bg-blue-500 text-white rounded-t-lg shadow-md"
+      class="chat-header flex justify-between items-center px-3 py-1 bg-blue-500 text-white rounded-t-lg shadow-md"
     >
       <div class="status flex flex-col">
         <span class="text-lg font-semibold">
@@ -24,7 +24,8 @@
       </div>
 
       <!-- Nút Gọi điện -->
-      <el-button
+       <div>
+        <el-button
         circle
         @click="makeCall"
         size="small"
@@ -44,23 +45,36 @@
       >
         <el-icon><Close /></el-icon>
       </el-button>
+
+       </div>
+      
     </div>
 
-    <div class="chat-messages flex-1 p-4 overflow-y-auto space-y-3">
+    <div class="chat-messages flex-1 p-4 overflow-y-auto space-y-3" ref="chatMessages">
+      <div
+        v-for="(message, index) in conversation.messages"
+        :key="index"
+        :class="
+          message.senderId === conversation.user1.id
+            ? 'flex justify-end max-w-2/3'
+            : 'flex justify-start max-w-2/3'
+        "
+      >
         <div
-          v-for="(message, index) in conversation.messages"
-          :key="index"
-          :class="message.senderId === conversation.user1.id ? 'flex justify-end' : 'flex justify-start'"
+          :class="
+            message.senderId === conversation.user1.id
+              ? 'bg-blue-500 text-white'
+              : 'bg-red-400 text-white'
+          "
+          class="message-item p-2 rounded-lg max-w-[220px] w-fit shadow-sm text-wrap"
         >
-          <div
-            :class="message.senderId === conversation.user1.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'"
-            class="message-item p-2 rounded-lg max-w-xs w-fit shadow-sm"
-          >
-            <p class="text-sm">{{ message.text }}</p>
-            <span class="text-xs text-gray-500">{{ formatTimestamp(message.timestamp) }}</span>
-          </div>
+          <p class="text-sm">{{ message.text }}</p>
+          <span class="text-xs text-black">{{
+            formatTimestamp(message.timestamp)
+          }}</span>
         </div>
       </div>
+    </div>
 
     <div
       class="chat-input p-3 flex items-center space-x-2 bg-gray-50 border-t border-gray-200 rounded-b-lg"
@@ -70,7 +84,9 @@
         placeholder="Type a message..."
         class="flex-1"
         size="large"
+        @keyup.enter="sendMessage"
       />
+      <el-button  :icon="Plus" circle />
       <el-button
         @click="sendMessage"
         size="small"
@@ -88,20 +104,26 @@
   </div>
 
   <!-- Icon Chat Button -->
-  <el-button
+  <button
     @click="openChat"
-    class="chat-toggle-btn fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300"
-    icon="el-icon-chat-dot-round"
-    size="large"
-  />
+    class="chat-toggle-btn fixed bottom-4 right-4 p-2 rounded-full shadow-lg  hover:bg-blue-50 transition-colors duration-300"
+  >
+    <Icon
+      icon="uil:comment-message"
+      width="48"
+      height="48"
+      style="color: #201dcd"
+    />
+  </button>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from "vue";
+import { ref, computed, reactive, nextTick, onMounted, onBeforeMount, watch } from "vue";
 import { ElButton, ElInput, ElIcon } from "element-plus";
 import { Icon } from "@iconify/vue";
-import { Phone, Close } from "@element-plus/icons-vue"; // Import các icon cần thiết
+import { Phone, Close, Plus } from "@element-plus/icons-vue"; // Import các icon cần thiết
 
+const chatMessages = ref<HTMLElement | null>(null);
 const isChatVisible = ref(false);
 
 // Dữ liệu mẫu cho một cuộc trò chuyện
@@ -165,6 +187,14 @@ const newMessage = ref("");
 const closeChat = () => {
   isChatVisible.value = false;
 };
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (chatMessages.value) {
+      chatMessages.value.scrollTop = chatMessages.value.scrollHeight;
+    }
+  });
+};
+
 
 // Gửi tin nhắn
 const sendMessage = () => {
@@ -175,6 +205,7 @@ const sendMessage = () => {
       timestamp: new Date().toISOString(),
     });
     newMessage.value = "";
+    scrollToBottom();
   }
 };
 
@@ -194,13 +225,25 @@ const makeCall = () => {
     console.log("Cannot make a call, user is offline");
   }
 };
+
+
+onMounted(() => {
+  scrollToBottom();
+});
+watch(
+  () => conversation.messages,
+  () => {
+    scrollToBottom();
+  },
+  { deep: true }
+);
 </script>
 
 <style scoped lang="scss">
 .chat-box {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 15px;
+  right: 5px;
   width: 350px;
   height: 450px;
   background-color: #fff;
@@ -248,19 +291,12 @@ const makeCall = () => {
 }
 
 .message-item {
-  background-color: #f0f0f0;
   border-radius: 8px;
   padding: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.chat-toggle-btn {
-  transition: all 0.3s ease;
-}
 
-.chat-toggle-btn:hover {
-  background-color: #2980b9;
-}
 
 .chat-input {
   display: flex;

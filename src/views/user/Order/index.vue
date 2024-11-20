@@ -10,6 +10,7 @@
       </el-tabs>
     </div>
   </div>
+  <ChatBox/>
 </template>
 
 <script setup lang="ts">
@@ -18,6 +19,8 @@ import type { TabsPaneContext } from "element-plus";
 
 import Filter from "./components/Filter.vue";
 import Table from "./components/TableOrder.vue";
+import ChatBox from "@/components/ChatBox/index.vue"
+
 
 import { useFilterOrderStore } from "@/store/modules/filterOrder";
 
