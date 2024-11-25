@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import Post from "./Post.vue";
+import Post from "@/components/Post/index.vue"
 
 const posts = ref([
   {
