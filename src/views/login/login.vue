@@ -55,7 +55,7 @@ defineOptions({
 import { ref, reactive } from "vue";
 import { Icon } from "@iconify/vue";
 import { useValidators } from "@/composables/use-validator.composable";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { User, Lock } from "@element-plus/icons-vue";
 import useUserStore from "@/store/modules/user";
 import { useLoading } from "@/composables/loading.composable";
@@ -65,10 +65,8 @@ import { ElMessage } from "element-plus";
 
 const useStore = useUserStore();
 const router = useRouter();
-const route = useRoute();
 
 const loading = useLoading();
-let loading1 = ref(false);
 
 const checked = ref(false);
 const validator = useValidators();
@@ -90,16 +88,24 @@ const onLogin = async () => {
     if (valid) {
       loading.startLoading("Logging in...");
       try {
-        // await useStore.userLogin(formLogin);
-        router.push("/user")
-        ElMessage({
-          type: "success",
-          message: "Login success",
-        });
+        useStore.userLogin(formLogin).then((res) => {
+          if (res.success) {
+            ElMessage({
+              type: "success",
+              message: "Login success",
+            });
 
+            router.push("/user");
+            loading.stopLoading();
+          } else {
+            ElMessage.error({ message: res.data });
+            loading.stopLoading();
+          }
+        });
       } catch (error) {
         console.error(error);
         ElMessage.error({ message: "Oops, login failed :(" });
+        loading.stopLoading();
       } finally {
         loading.stopLoading();
       }

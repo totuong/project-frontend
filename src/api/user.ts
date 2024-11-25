@@ -33,7 +33,7 @@ enum API {
 }
 
 export const getProfile = (data: LoginFormData) =>
-  request.post<any, TokenResult>(API.LOGIN_URL, data);
+  request.post<any, TokenResult>(API.PROFILE_URL, data);
 
 export const getPost = (data: RegisterFormData) =>
   request.post<any, ResponseData>(API.REGISTER_URL, data);

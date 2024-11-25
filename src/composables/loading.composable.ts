@@ -14,7 +14,7 @@ const loadingComposable = () => {
   const stopLoading = () => {
     setTimeout(() => {
       loading.close();
-    }, 2000);
+    }, 500);
   };
 
   return { loading, startLoading, stopLoading };

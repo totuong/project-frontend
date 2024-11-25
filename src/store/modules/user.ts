@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import router from "@/router";
-import { reqLogin, reqUserInfo, reqLogOut, reqRegister } from "@/api/auth";
-import type { RouteRecordRaw } from "vue-router";
+import { reqLogin, reqUserInfo, reqRegister } from "@/api/auth";
 import type {
   LoginFormData,
   RegisterFormData,
@@ -9,46 +8,32 @@ import type {
   UserResult,
   ResponseData,
 } from "@/types/api/auth";
-import type { UserState } from "./types/types";
-import { SET_TOKEN, GET_TOKEN, REMOVE_TOKEN } from "@/utils/token";
-import { constantRoute, asyncRoute, anyRoute } from "@/router/routes";
+import type { User } from "@/types/module/User";
+import { setToken, removeToken } from "@/utils/auth";
 
-import cloneDeep from "lodash/cloneDeep";
-
-let dynamicRoutes: RouteRecordRaw[] = [];
-
-function filterAsyncRoute(asyncRoute: any, routes: any) {
-  return asyncRoute.filter((item: any) => {
-    if (routes.includes(item.name)) {
-      if (item.children && item.children.length > 0) {
-        item.children = filterAsyncRoute(item.children, routes)
-      }
-      return true
-    }
-  })
-}
-
-const useUserStore = defineStore("User", {
-  state: (): UserState => {
+const useUserStore = defineStore("user", {
+  state: (): User => {
     return {
-      token: GET_TOKEN()!,
-      menuRoutes: constantRoute,
       username: "",
       avatar: "",
-      buttons: [],
-      role: 1,
+      role: "",
+      id: "",
+      fullName: "",
     };
   },
   actions: {
     async userLogin(data: LoginFormData) {
-      const res: TokenResult = await reqLogin(data);
-      if (res.success === true) {
-        this.token = res.data as string;
-        SET_TOKEN(res.data as string);
-        return "ok";
-      } else {
-        return Promise.reject(new Error(res.data as string));
-      }
+      return new Promise<TokenResult>((resolve, reject) => {
+        console.log("🚀 ~ .then ~ res:");
+        reqLogin(data)
+          .then((res) => {
+            if (res.success === true) setToken(res.data);
+            resolve(res);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
     },
 
     async userRegister(data: RegisterFormData) {
@@ -63,18 +48,10 @@ const useUserStore = defineStore("User", {
     },
 
     async userInfo() {
-      const res: UserResult = await await reqUserInfo();
-
+      const res: UserResult = await reqUserInfo();
+      const user: User = res.data;
       if (res.success === true) {
-        this.username = res.data.username as string;
-        this.avatar = res.data.avatar as string;
-        this.role = res.data.role;
-
-        this.menuRoutes = [...constantRoute, anyRoute];
-        dynamicRoutes = [anyRoute];
-        dynamicRoutes.forEach((route) => {
-          router.addRoute(route);
-        });
+        this.$state = user;
         return "ok";
       } else {
         return Promise.reject(new Error(res.statusCode as unknown as string));
@@ -87,7 +64,7 @@ const useUserStore = defineStore("User", {
       //   this.token = "";
       //   this.username = "";
       //   this.avatar = "";
-      REMOVE_TOKEN();
+      removeToken;
       // dynamicRoutes.forEach((route) => {
       //   if (route.name) {
       router.push("/");

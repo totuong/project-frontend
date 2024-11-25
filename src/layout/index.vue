@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import Main from "./main/index.vue";
 import Noti from "./Notification/index.vue";
 import Messenger from "./Messenger/index.vue";
@@ -17,7 +16,10 @@ import {
 import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
 
-let userStore = useUserStore();
+const userStore = useUserStore();
+console.log(userStore.username); // Truy cập username
+console.log(userStore.avatar);   // Truy cập avatar
+console.log(userStore.role); 
 const router = useRouter();
 const handleSelect = (item: Record<string, any>) => {
   console.log(item);
@@ -82,9 +84,9 @@ let LayOutSettingStore = useLayOutSettingStore();
         >
       </div>
 
-      <div class="second w-64 ml-20 rounded-xl	">
+      <div class="second w-64 ml-20 rounded-xl">
         <el-autocomplete
-          class="w-[240px] "
+          class="w-[240px]"
           v-model="state"
           size="large"
           :fetch-suggestions="querySearchAsync"
@@ -109,7 +111,7 @@ let LayOutSettingStore = useLayOutSettingStore();
           <span class="flex flex-row items-center">
             <Icon class="mr-3" icon="icon-park:avatar" width="26" height="26" />
             <!-- v-if="username" -->
-            <p class="text-black">username</p>
+            <p class="text-black">{{ userStore.username }}</p>
           </span>
           <template #dropdown>
             <el-dropdown-menu class="logout">
