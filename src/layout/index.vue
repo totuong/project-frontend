@@ -15,11 +15,9 @@ import {
 } from "@element-plus/icons-vue";
 import { Icon } from "@iconify/vue";
 import { onMounted, ref } from "vue";
+import { removeToken } from "@/utils/auth";
 
 const userStore = useUserStore();
-console.log(userStore.username); // Truy cập username
-console.log(userStore.avatar);   // Truy cập avatar
-console.log(userStore.role); 
 const router = useRouter();
 const handleSelect = (item: Record<string, any>) => {
   console.log(item);
@@ -57,6 +55,10 @@ const handleChangePasswordClick = () => {
 const handleHomeClick = () => {
   router.push("/user/index"); // Điều hướng tới /user/profile
 };
+const logout =()=>{
+  removeToken()
+  router.push("/login")
+}
 const links = ref<LinkItem[]>([]);
 const loadAll = () => {
   return [
@@ -124,7 +126,7 @@ let LayOutSettingStore = useLayOutSettingStore();
               <el-dropdown-item
                 ><el-icon><Setting /></el-icon>Setting</el-dropdown-item
               >
-              <el-dropdown-item divided>
+              <el-dropdown-item divided @click="logout">
                 <Icon
                   icon="material-symbols:logout"
                   width="20"

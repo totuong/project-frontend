@@ -1,5 +1,5 @@
 export default {
-    title: 'Home',
+    title: 'Booking App',
     logo: '/logo.png',
     logoHidden: true,
   }

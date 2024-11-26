@@ -33,7 +33,7 @@ export const constantRoute = [
         path: "/home",
         component: () => import("@/views/home/index.vue"),
         meta: {
-          title: "Trang chủ",
+          title: "Home",
           hidden: false,
           auth: false,
           icon: "HomeFilled",
@@ -57,7 +57,7 @@ export const constantRoute = [
         path: "/user/index",
         component: () => import("@/views/user/index.vue"),
         meta: {
-          title: "Trang chủ1",
+          title: "Trang chủ",
           hidden: false,
           auth: false,
           icon: "HomeFilled",
@@ -67,7 +67,7 @@ export const constantRoute = [
         path: "/user/profile",
         component: () => import("@/views/user/Profile/index.vue"),
         meta: {
-          title: "Profile User",
+          title: "Profile",
           hidden: false,
           auth: false,
           icon: "HomeFilled",

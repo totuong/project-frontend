@@ -38,10 +38,14 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
-    if (to.path == "/login") {
+    if (to.path === "/login") {
+      if (to.query.redirect === "/login") {
+        next();
+        return;
+      }
       next();
     } else {
-      next({ path: "/", query: { redirect: to.path } });
+      next({ path: "/login", query: { redirect: to.path } });
     }
   }
 });
