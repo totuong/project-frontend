@@ -150,12 +150,25 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, onBeforeMount, onMounted, ref } from "vue";
 import { ElInput } from "element-plus";
 import type { InputInstance } from "element-plus";
 import BookForm from "./BookForm.vue";
 import { Icon } from "@iconify/vue";
 import { Clock, OfficeBuilding } from "@element-plus/icons-vue";
+
+
+import { useProfile } from "../hookProfile";
+
+
+
+
+const {
+  profile,
+} = useProfile();
+
+
+
 const inputValue = ref("");
 const dynamicTags = ref([
   "🎩 Ảo thuật",

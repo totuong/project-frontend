@@ -11,6 +11,7 @@ export type Profile = {
   email: string;
   mobile: string;
   avatar: string;
+  coverPhoto: string;
   role: string;
   fullName: string;
   friendsCount: number;

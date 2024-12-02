@@ -25,3 +25,8 @@ export function setToken(token: string, expires = 7): void {
 export function removeToken(): void {
   Cookies.remove(TOKEN_KEY);
 }
+
+
+export const formatToken = (token: string): string => {
+  return 'Bearer ' + token
+}

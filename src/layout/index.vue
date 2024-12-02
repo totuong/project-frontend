@@ -113,7 +113,7 @@ let LayOutSettingStore = useLayOutSettingStore();
           <span class="flex flex-row items-center">
             <Icon class="mr-3" icon="icon-park:avatar" width="26" height="26" />
             <!-- v-if="username" -->
-            <p class="text-black">{{ userStore.username }}</p>
+            <p class="text-black">{{ userStore.fullName }}</p>
           </span>
           <template #dropdown>
             <el-dropdown-menu class="logout">

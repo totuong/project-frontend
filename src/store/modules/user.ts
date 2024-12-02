@@ -47,14 +47,11 @@ const useUserStore = defineStore("user", {
     },
 
     async userInfo() {
-      console.log("🚀 ~ userInfo ~ token:", getToken());
 
       const res: UserResult = await reqUserInfo();
       const user: User = res.data;
       if (res.success === true) {
         this.$state = user;
-        console.log("🚀 ~ userInfo ~ this.$state:", this.$state);
-
         return "ok";
       } else {
         return Promise.reject(new Error(res.statusCode as unknown as string));
