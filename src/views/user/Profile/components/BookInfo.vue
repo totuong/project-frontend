@@ -167,6 +167,9 @@ const {
   profile,
 } = useProfile();
 
+const props = defineProps({
+  data: Object,
+});
 
 
 const inputValue = ref("");

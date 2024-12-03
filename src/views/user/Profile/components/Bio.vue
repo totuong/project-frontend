@@ -2,7 +2,7 @@
   <div class="">
     <div class="cover-photo relative">
       <img
-        :src="profileData.coverPhoto"
+        :src="coverPhotoUrl"
         alt="Cover Photo"
         class="cover-image w-full h-[400px] object-cover rounded-t-lg"
       />
@@ -17,10 +17,12 @@
             ref="upload2"
             :action="uploadCoverPhotoAction"
             :headers="headers"
+            name="cover-photo"
             :limit="1"
             method="PUT"
-            :auto-upload="false"
-            :on-success="handleSuccess"
+            :auto-upload="true"
+            :on-success="handlePhotoSuccess"
+            :show-file-list="false"
             :multiple="false"
           >
             <template #trigger>
@@ -31,12 +33,15 @@
       </el-tooltip>
     </div>
     <el-row :gutter="24" class="relative flex flex-row justify-between mb-4">
-      <div class="avatar-container ml-12 flex items-center absolute bottom-0">
-        <img
-          :src="profileData.avatar"
-          alt="Avatar"
-          class="avatar-image w-30 h-30 rounded-full border-4 border-white"
-        />
+      <div class="avatar-container ml-12 flex items-center bottom-0 absolute">
+        <div class="avatar-image">
+          <img
+            :src="avatarUrl"
+            alt="Avatar"
+            class="avatar-image w-44 h-44 rounded-full border-4 border-white"
+          />
+        </div>
+
         <el-tooltip
           class="box-item"
           effect="dark"
@@ -49,8 +54,10 @@
             :headers="headers"
             :limit="1"
             method="PUT"
-            :auto-upload="false"
-            :on-success="handleSuccess"
+            name="avatar"
+            :auto-upload="true"
+            :on-success="handleAvatarSuccess"
+            :show-file-list="false"
             :multiple="false"
           >
             <template #trigger>
@@ -63,8 +70,8 @@
           </el-upload>
         </el-tooltip>
       </div>
-      <el-col :span="4" class="info-avatar ml-60 mt-4">
-        <h2 class="username text-2xl font-semibold">Tô Tường</h2>
+      <el-col :span="4" class="info-avatar ml-60 mt-6 mb-6">
+        <h2 class="username text-3xl font-semibold">Tô Tường</h2>
         <h2 class="follower text-xl font-medium opacity-50">149 followers</h2>
       </el-col>
       <el-col :span="10" class="flex justify-end content-center">
@@ -100,45 +107,61 @@
 
 <script setup lang="ts">
 import { ArrowDown, Edit } from "@element-plus/icons-vue";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, ref } from "vue";
 import EditInfoForm from "./EditInfoForm.vue";
-import { defaultProfile, useProfile } from "../hookProfile";
-import type { Profile } from "@/types/module/User";
 import { getToken, formatToken } from "@/utils/auth";
 import { env } from "@/utils/env";
 
-const editInfoFormRef = ref<InstanceType<typeof EditInfoForm>>();
+// Props
+const props = defineProps({
+  data: Object,
+});
 
-const props = defineProps<{
-  data?: Profile;
-}>();
+// Base URL server
+const baseUrl = "http://localhost:3000";
 
+// URL upload
 const uploadAvatarAction =
-  env.VITE_APP_BASE_API + "/v1/api/profile/upload-avatar";
+  env.VITE_APP_BASE_API + "/v1/user/profile/upload-avatar";
 const uploadCoverPhotoAction =
-  env.VITE_APP_BASE_API + "/v1/api/profile/upload-cover-photo";
+  env.VITE_APP_BASE_API + "/v1/user/profile/upload-cover-photo";
 const headers = {
   Authorization: formatToken(getToken() ?? ""),
 };
 
-const profileData = computed(() => ({
-  coverPhoto:
-    props.data?.coverPhoto || "../../../../../public/taylor-swift-inc.webp",
-  avatar:
-    props.data?.avatar ||
-    "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-  name: props.data?.fullName,
-  followers: props.data?.followersCount,
-}));
-function handleSuccess(response) {
-  if (response.success) {
-    value.value = response?.data;
-  }
-}
+// Chuyển đổi đường dẫn cục bộ thành URL hợp lệ
+const convertLocalPathToUrl = (path: string) => {
+  if (!path) return null;
+  const relativePath = path
+    .replace(/\\/g, "/") // Thay backslash bằng slash
+    .split("project-frontend")[1]; // Lấy phần sau "project-frontend"
+  return relativePath ? `${baseUrl}${relativePath}` : null;
+};
 
-// Hàm mở dialog
+// Profile data
+const profileData = computed(() => ({
+  coverPhoto: convertLocalPathToUrl(props.data?.coverPhoto),
+  avatar: convertLocalPathToUrl(props.data?.avatar),
+  name: props.data?.fullName || "Người dùng",
+  followers: props.data?.followersCount || 0,
+}));
+
+// Bind URL từ computed
+const avatarUrl = computed(() => profileData.value.avatar);
+const coverPhotoUrl = computed(() => profileData.value.coverPhoto);
+
+// Xử lý khi upload thành công
+const handleAvatarSuccess = (response: any) => {
+  if (response.success) props.data.avatar = response?.data;
+};
+const handlePhotoSuccess = (response: any) => {
+  if (response.success) props.data.coverPhoto = response?.data;
+};
+
+// Form chỉnh sửa
+const editInfoFormRef = ref<InstanceType<typeof EditInfoForm>>();
 const onShow = () => {
-  editInfoFormRef.value?.showModel(); // Gọi showModel() từ BookForm
+  editInfoFormRef.value?.showModel();
 };
 </script>
 
