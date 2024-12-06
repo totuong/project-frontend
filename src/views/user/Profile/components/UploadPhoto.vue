@@ -1,138 +1,128 @@
 <template>
-  <el-dialog v-model="showForm" :draggable="true" :show-close="false" overflow>
+  <el-dialog v-model="showModel" :draggable="true" :show-close="false" overflow>
     <template #header>
-      <div class="title pb-4 font-bold text-2xl text-center">
-        Chỉnh sửa thông tin cá nhân
-      </div>
+      <div class="title pb-4 font-bold text-2xl text-center">Upload avatar</div>
       <hr class="header-divider" />
     </template>
-    <el-form
-      ref="ruleFormRef"
-      :model="ruleForm"
-      :rules="rules"
-      label-width="auto"
-      class="demo-ruleForm"
-      :size="formSize"
-      status-icon
-    >
-      <el-form-item label="Tên đầy đủ" prop="name">
-        <el-input v-model="ruleForm.name" />
-      </el-form-item>
-      <el-form-item label="Nghệ Danh" prop="region">
-        <el-input v-model="ruleForm.region" />
-      </el-form-item>
+    <div>
+      <el-upload
+        ref="uploadRef"
+        :action="uploadAvatarAction"
+        :headers="headers"
+        name="avatar"
+        list-type="picture-card"
+        :limit="1"
+        method="PUT"
+        :auto-upload="false"
+        :on-success="handleSuccess"
+        :multiple="false"
+        :preview-file="previewFile"
+      >
+        <el-icon><Plus /></el-icon>
 
-      <el-form-item label="Sinh nhật" required>
-        <el-form-item prop="date1">
-          <el-date-picker
-            v-model="ruleForm.date1"
-            type="date"
-            aria-label="Pick a date"
-            placeholder="Pick a date"
-            style="width: 100%"
-          />
-        </el-form-item>
-      </el-form-item>
-
-      <el-form-item label="Email" prop="region">
-        <el-input v-model="ruleForm.region" />
-      </el-form-item>
-      <el-form-item label="Artist">
-        <el-switch
-          v-model="value2"
-          class=""
-          inline-prompt
-          :active-icon="Check"
-          :inactive-icon="Close"
-        />
-      </el-form-item>
-    </el-form>
-
-    <template #footer>
-      <div class="flex px-2.5">
-        <el-button
-          type="primary"
-          @click="submitForm(ruleFormRef)"
-          class="w-full"
-          >Save</el-button
-        >
+        <template #file="{ file }">
+          <div>
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt=""
+            />
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePictureCardPreview(file)"
+              >
+                <el-icon><zoom-in /></el-icon>
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleDownload(file)"
+              >
+                <el-icon><Download /></el-icon>
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <el-icon><Delete /></el-icon>
+              </span>
+            </span>
+          </div>
+        </template>
+      </el-upload>
+      <div class="w-full items-center flex justify-center">
+        <el-button type="primary" @click="handleSubmitUpload"> Save </el-button>
       </div>
-    </template>
+    </div>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, defineExpose, reactive } from "vue";
-import type { ComponentSize, FormInstance, FormRules } from "element-plus";
-import { Check, Close } from "@element-plus/icons-vue";
+import { env } from "@/utils/env";
+import { formatToken, getToken } from "@/utils/auth";
+import { Delete, Download, Plus, ZoomIn } from "@element-plus/icons-vue";
 
-const showForm = ref(false);
-const value2 = ref(true);
+import { ElMessage, type UploadFile } from "element-plus";
+// Base URL server
 
-const showModel = () => {
-  showForm.value = true;
-  console.log("🚀 ~ showModel ~ showForm.value :", showForm.value);
+const uploadAvatarAction =
+  env.VITE_APP_BASE_API + "/v1/user/profile/upload-avatar";
+const uploadCoverPhotoAction =
+  env.VITE_APP_BASE_API + "/v1/user/profile/upload-cover-photo";
+const headers = {
+  Authorization: formatToken(getToken() ?? ""),
 };
-defineExpose({ showModel });
+const uploadRef = ref()
+const dialogImageUrl = ref("");
+const dialogVisible = ref(false);
+const disabled = ref(false);
 
-interface RuleForm {
-  name: string;
-  region: string;
-  count: string;
-  date1: string;
-  delivery: boolean;
-}
+const showModel = ref(false);
 
-const formSize = ref<ComponentSize>("default");
-const ruleFormRef = ref<FormInstance>();
-const ruleForm = reactive<RuleForm>({
-  name: "Hello",
-  region: "",
-  count: "",
-  date1: "",
-  delivery: false,
-});
+const onShowModel = () => {
+  showModel.value = true;
+};
+defineExpose({ onShowModel });
 
-const rules = reactive<FormRules<RuleForm>>({
-  name: [
-    { required: true, message: "Please input Activity name", trigger: "blur" },
-    { min: 3, max: 5, message: "Length should be 3 to 5", trigger: "blur" },
-  ],
-  region: [
-    {
-      required: true,
-      message: "Please select Activity zone",
-      trigger: "change",
-    },
-  ],
-  count: [
-    {
-      required: true,
-      message: "Please select Activity count",
-      trigger: "change",
-    },
-  ],
-  date1: [
-    {
-      type: "date",
-      required: true,
-      message: "Please pick a date",
-      trigger: "change",
-    },
-  ],
-});
-
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      console.log("submit!");
-    } else {
-      console.log("error submit!", fields);
-    }
+const handleSuccess = () => {
+  uploadRef.value.submit()
+  ElMessage.success({
+    message: "Upload Success",
   });
-  console.log("🚀 ~ save ~ save:");
-  showForm.value = false;
+  showModel.value = false;
+};
+const handlePictureCardPreview = (file: UploadFile) => {
+  dialogImageUrl.value = file.url!;
+  console.log(
+    "🚀 ~ handlePictureCardPreview ~ dialogImageUrl.value :",
+    dialogImageUrl.value
+  );
+  dialogVisible.value = true;
+};
+
+const handleDownload = (file: UploadFile) => {
+  console.log(file);
+};
+
+const handleSubmitUpload = () => {
+  uploadRef.value.submit();
+};
+const previewFile = (file: File) => {
+  return URL.createObjectURL(file); // Trả về blob URL
+};
+const closeDialog = () => {
+  if (dialogImageUrl.value) {
+    URL.revokeObjectURL(dialogImageUrl.value); // Giải phóng URL blob
+    dialogImageUrl.value = "";
+  }
+  dialogVisible.value = false;
+};
+
+const handleRemove = (file: UploadFile) => {
+  console.log(file);
 };
 </script>
 

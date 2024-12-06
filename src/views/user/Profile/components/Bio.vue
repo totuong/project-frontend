@@ -48,26 +48,12 @@
           content="Chỉnh sửa ảnh đại diện"
           placement="top"
         >
-          <el-upload
-            ref="upload"
-            :action="uploadAvatarAction"
-            :headers="headers"
-            :limit="1"
-            method="PUT"
-            name="avatar"
-            :auto-upload="true"
-            :on-success="handleAvatarSuccess"
-            :show-file-list="false"
-            :multiple="false"
-          >
-            <template #trigger>
-              <el-button
-                :icon="Edit"
-                class="edit-cover absolute bottom-[25px] right-[10px]"
-                circle
-              />
-            </template>
-          </el-upload>
+          <el-button
+            :icon="Edit"
+            class="edit-cover absolute bottom-[25px] right-[10px]"
+            circle
+            @click="onShowUpload"
+          />
         </el-tooltip>
       </div>
       <el-col :span="4" class="info-avatar ml-60 mt-6 mb-6">
@@ -100,6 +86,7 @@
       </el-col>
     </el-row>
     <edit-info-form ref="editInfoFormRef" />
+    <upload-photo ref="uploadPhotoRef" />
 
     <hr />
   </div>
@@ -109,6 +96,7 @@
 import { ArrowDown, Edit } from "@element-plus/icons-vue";
 import { computed, ref } from "vue";
 import EditInfoForm from "./EditInfoForm.vue";
+import UploadPhoto from "./UploadPhoto.vue";
 import { getToken, formatToken } from "@/utils/auth";
 import { env } from "@/utils/env";
 
@@ -160,8 +148,12 @@ const handlePhotoSuccess = (response: any) => {
 
 // Form chỉnh sửa
 const editInfoFormRef = ref<InstanceType<typeof EditInfoForm>>();
+const uploadPhotoRef = ref<InstanceType<typeof UploadPhoto>>();
 const onShow = () => {
   editInfoFormRef.value?.showModel();
+};
+const onShowUpload = () => {
+  uploadPhotoRef.value?.onShowModel();
 };
 </script>
 
