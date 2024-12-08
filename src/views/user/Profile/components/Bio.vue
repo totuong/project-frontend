@@ -2,7 +2,7 @@
   <div class="">
     <div class="cover-photo relative">
       <img
-        :src="coverPhotoUrl"
+        :src="coverPhotoUrl ?? '/taylor-swift-inc.webp'"
         alt="Cover Photo"
         class="cover-image w-full h-[400px] object-cover rounded-t-lg"
       />
@@ -12,31 +12,19 @@
         content="Chỉnh sửa ảnh bìa"
         placement="top"
       >
-        <div class="absolute bottom-4 right-4">
-          <el-upload
-            ref="upload2"
-            :action="uploadCoverPhotoAction"
-            :headers="headers"
-            name="cover-photo"
-            :limit="1"
-            method="PUT"
-            :auto-upload="true"
-            :on-success="handlePhotoSuccess"
-            :show-file-list="false"
-            :multiple="false"
-          >
-            <template #trigger>
-              <el-button :icon="Edit" class="edit-cover" circle />
-            </template>
-          </el-upload>
-        </div>
+        <el-button
+          :icon="Edit"
+          class="edit-cover absolute bottom-[10px] right-[10px]"
+          circle
+          @click="onShowUploadCoverPhoto"
+        />
       </el-tooltip>
     </div>
     <el-row :gutter="24" class="relative flex flex-row justify-between mb-4">
       <div class="avatar-container ml-12 flex items-center bottom-0 absolute">
         <div class="avatar-image">
           <img
-            :src="avatarUrl"
+            :src="avatarUrl ?? '/logo.png'"
             alt="Avatar"
             class="avatar-image w-44 h-44 rounded-full border-4 border-white"
           />
@@ -52,26 +40,58 @@
             :icon="Edit"
             class="edit-cover absolute bottom-[25px] right-[10px]"
             circle
-            @click="onShowUpload"
+            @click="onShowUploadAvatar"
           />
         </el-tooltip>
       </div>
       <el-col :span="4" class="info-avatar ml-60 mt-6 mb-6">
-        <h2 class="username text-3xl font-semibold">Tô Tường</h2>
-        <h2 class="follower text-xl font-medium opacity-50">149 followers</h2>
+        <h2 class="username text-3xl font-semibold">{{ data.fullName }}</h2>
+        <div class="follower text-xl font-medium opacity-50">
+          {{ 29 }} Followers
+        </div>
       </el-col>
       <el-col :span="10" class="flex justify-end content-center">
         <div class="w-full flex justify-end space-x-2">
-          <el-button type="primary" icon="Edit" @click="onShow"
+          <el-button
+            v-if="isMyProfile(data.id)"
+            type="primary"
+            icon="Edit"
+            @click="onShow"
             >Chỉnh sửa thông tin cá nhân</el-button
           >
+          <div v-else class="flex space-x-2">
+            <div>
+              <el-button v-if="statusFriend === ''" @click="addFriend"
+                ><Icon icon="weui:add-friends-filled" class="w-5 h-5 mr-2" />
+                Kết bạn</el-button
+              >
+              <el-dropdown v-if="statusFriend === 'accepted'">
+                <el-button>
+                  <Icon icon="fa-solid:user-friends" class="w-5 h-5 mr-4" />
+                  Bạn bè<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                </el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item>Theo dõi</el-dropdown-item>
+                    <el-dropdown-item>Nhắn tin</el-dropdown-item>
+                    <el-dropdown-item>Hủy kết bạn</el-dropdown-item>
+                    <el-dropdown-item>Chặn</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+
+              <el-button v-if="statusFriend === 'pending'" @click="unFriend()"
+                ><Icon icon="weui:add-friends-filled" class="w-5 h-5 mr-2" />
+                Hủy lời mời</el-button
+              >
+            </div>
+
+            <el-button icon="Message" @click="onShow">Nhắn tin</el-button>
+          </div>
 
           <el-dropdown>
-            <el-button
-              type="primary"
-              class="flex content-center justify-center items-center"
-            >
-              <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+            <el-button class="flex content-center justify-center items-center">
+              <el-icon><ArrowDown /></el-icon>
             </el-button>
             <template #dropdown>
               <el-dropdown-menu>
@@ -86,45 +106,33 @@
       </el-col>
     </el-row>
     <edit-info-form ref="editInfoFormRef" />
-    <upload-photo ref="uploadPhotoRef" />
+    <upload-avatar ref="uploadAvatarRef" @on-update="loadPage" />
+    <upload-cover-photo ref="uploadCoverPhotoRef" @on-update="loadPage" />
 
     <hr />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowDown, Edit } from "@element-plus/icons-vue";
-import { computed, ref } from "vue";
+import { ArrowDown, Edit, Message } from "@element-plus/icons-vue";
+import { computed, onBeforeMount, ref, watch } from "vue";
 import EditInfoForm from "./EditInfoForm.vue";
-import UploadPhoto from "./UploadPhoto.vue";
-import { getToken, formatToken } from "@/utils/auth";
-import { env } from "@/utils/env";
+import UploadAvatar from "./UploadAvatar.vue";
+import UploadCoverPhoto from "./UploadCoverPhoto.vue";
+import { convertLocalPathToUrl } from "@/utils/image";
+import { type Profile } from "@/types/module/User";
+import { useProfile } from "../hookProfile";
+import { Icon } from "@iconify/vue";
+// Định nghĩa Props với kiểu đúng
+const props = defineProps<{
+  data: Profile; // Đảm bảo bạn chỉ rõ đây là kiểu Profile
+}>();
 
-// Props
-const props = defineProps({
-  data: Object,
-});
+const { isMyProfile, onAddFriend, onCheckFriendStatus, onUnfriend } =
+  useProfile();
+const emit = defineEmits(["onUpdate"]);
 
-// Base URL server
-const baseUrl = "http://localhost:3000";
-
-// URL upload
-const uploadAvatarAction =
-  env.VITE_APP_BASE_API + "/v1/user/profile/upload-avatar";
-const uploadCoverPhotoAction =
-  env.VITE_APP_BASE_API + "/v1/user/profile/upload-cover-photo";
-const headers = {
-  Authorization: formatToken(getToken() ?? ""),
-};
-
-// Chuyển đổi đường dẫn cục bộ thành URL hợp lệ
-const convertLocalPathToUrl = (path: string) => {
-  if (!path) return null;
-  const relativePath = path
-    .replace(/\\/g, "/") // Thay backslash bằng slash
-    .split("project-frontend")[1]; // Lấy phần sau "project-frontend"
-  return relativePath ? `${baseUrl}${relativePath}` : null;
-};
+const statusFriend = ref("");
 
 // Profile data
 const profileData = computed(() => ({
@@ -138,22 +146,51 @@ const profileData = computed(() => ({
 const avatarUrl = computed(() => profileData.value.avatar);
 const coverPhotoUrl = computed(() => profileData.value.coverPhoto);
 
-// Xử lý khi upload thành công
-const handleAvatarSuccess = (response: any) => {
-  if (response.success) props.data.avatar = response?.data;
-};
-const handlePhotoSuccess = (response: any) => {
-  if (response.success) props.data.coverPhoto = response?.data;
+const loadPage = () => {
+  emit("onUpdate");
 };
 
 // Form chỉnh sửa
 const editInfoFormRef = ref<InstanceType<typeof EditInfoForm>>();
-const uploadPhotoRef = ref<InstanceType<typeof UploadPhoto>>();
+const uploadAvatarRef = ref<InstanceType<typeof UploadAvatar>>();
+const uploadCoverPhotoRef = ref<InstanceType<typeof UploadCoverPhoto>>();
 const onShow = () => {
-  editInfoFormRef.value?.showModel();
+  editInfoFormRef.value?.showModel(props.data);
 };
-const onShowUpload = () => {
-  uploadPhotoRef.value?.onShowModel();
+const onShowUploadAvatar = () => {
+  uploadAvatarRef.value?.onShowModel();
+};
+
+const onShowUploadCoverPhoto = () => {
+  uploadCoverPhotoRef.value?.onShowModel();
+};
+const updateStatusFriend = async (id: string) => {
+  if (id) {
+    statusFriend.value = await onCheckFriendStatus(id);
+  }
+};
+watch(
+  () => props.data.id,
+  (newId, oldId) => {
+    if (newId && newId !== oldId) {
+      updateStatusFriend(newId);
+    }
+  },
+  { immediate: true } // Gọi ngay lần đầu khi mount
+);
+// Hàm xử lý gửi yêu cầu kết bạn
+const addFriend = async () => {
+  const success = await onAddFriend(props.data.id);
+  if (success) {
+    statusFriend.value = "pending";
+  }
+};
+
+const unFriend = async () => {
+  const success = await onUnfriend(props.data.id);
+  if (success) {
+    statusFriend.value = "";
+  }
 };
 </script>
 

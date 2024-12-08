@@ -1,31 +1,91 @@
-import { getProfile } from "@/api/user";
-import type { Profile } from "@/types/module/User";
+import {
+  getProfile,
+  saveProfile,
+  getFriends,
+  acceptFriend,
+  addFriend,
+  unfriend,
+  checkFriend,
+} from "@/api/user";
+import { defaultProfile, type Profile } from "@/types/module/User";
 import type { Result } from "@/types/api/base";
 import { ref } from "vue";
+import useUserStore from "@/store/modules/user";
+const userStore = useUserStore();
 
 export function useProfile() {
-  const defaultProfile: Profile = {
-    id: "",
-    userId: "",
-    email: "",
-    mobile: "",
-    avatar: "/logo.png",
-    coverPhoto: "/taylor-swift-inc.webp",
-    role: "",
-    fullName: "Anonymous",
-    friendsCount: 0,
-    followersCount: 0,
-    followingCount: 0,
-    postsCount: 0,
-    isFollowing: false,
-  };
-
   const profile = ref<Profile>(defaultProfile);
+  const myProfileId = userStore.profileId;
+  const response = ref();
 
-  async function onGetProfile(id?: string) {
-    const result: Result = await getProfile(id);
+  async function onGetProfile(code: string) {
+    const result: Result = await getProfile(code);
     profile.value = result.data ?? {};
   }
+  function onSaveProfile(form: Profile) {
+    saveProfile(form);
+  }
+  function isMyProfile(id: string): boolean {
+    return id === myProfileId;
+  }
+  function isArtist(data: Profile): boolean {
+    return "ARTIST" === data.role;
+  }
 
-  return { defaultProfile, onGetProfile, profile };
+  async function onGetFriends() {
+    const result: Result = await getFriends();
+    response.value = result.data ?? {};
+  }
+
+ 
+  async function onAddFriend(id: string) {
+    try {
+      const result: Result = await addFriend(id);
+      return result.success;
+    } catch (error) {
+      console.error("Failed to send friend request:", error);
+      return false;
+    }
+  }
+
+  async function onAcceptFriend(id: string) {
+    try {
+      const result: Result = await acceptFriend(id);
+      return result.success;
+    } catch (error) {
+      console.error("Failed to send friend request:", error);
+      return false;
+    }
+  }
+  async function onUnfriend(id: string) {
+    try {
+      const result: Result = await unfriend(id);
+      return result.success;
+    } catch (error) {
+      console.error("Failed to send friend request:", error);
+      return false;
+    }
+  }
+
+  async function onCheckFriendStatus(id: string) {
+    try {
+      const result: Result = await checkFriend(id);
+      return result?.data || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  return {
+    onGetProfile,
+    onSaveProfile,
+    isMyProfile,
+    isArtist,
+    onGetFriends,
+    onAddFriend,
+    onAcceptFriend,
+    onUnfriend,
+    onCheckFriendStatus,
+    profile,
+  };
 }

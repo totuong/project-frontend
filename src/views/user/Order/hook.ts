@@ -6,7 +6,7 @@ export function usePaymentHook() {
   const invoices = ref();
   const pagination = ref({
     page: 1,
-    total: 0
+    total: 0,
   });
 
   const onGetInvoices = async () => {
@@ -17,8 +17,8 @@ export function usePaymentHook() {
       params: {
         ...getQuery,
         page: (pagination.value.page ?? 1) - 1,
-        limit: 10
-      }
+        limit: 10,
+      },
     };
 
     const { data, meta } = await getConfirmations(params);
@@ -35,7 +35,7 @@ export function usePaymentHook() {
   };
 
   const onDownloadRawData = async (id: string, offerId: string) => {
-    downloadRawData(id, offerId).then(data => {
+    downloadRawData(id, offerId).then((data) => {
       const blob = new Blob([data], { type: "text/csv" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
@@ -57,6 +57,6 @@ export function usePaymentHook() {
     getPayout,
     getPaid,
     onDownloadRawData,
-    onChangePage
+    onChangePage,
   };
 }

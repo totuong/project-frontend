@@ -29,6 +29,7 @@ export type User = {
   email: string;
   mobile: string;
   role: string;
+  profileCode: string;
 };
 
 export type UserResult = {
