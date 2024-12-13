@@ -6,6 +6,7 @@
       label-position="top"
       :rules="loginFormRules"
       size="large"
+      @keydown.enter="onLogin"
     >
       <h1 class="text-3xl font-semibold text-blue-600">Đăng nhập</h1>
       <br />
@@ -94,7 +95,7 @@ const onLogin = async () => {
               type: "success",
               message: "Login success",
             });
-
+              
             router.push("/user");
             loading.stopLoading();
           } else {

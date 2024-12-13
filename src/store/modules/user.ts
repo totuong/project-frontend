@@ -9,7 +9,7 @@ import type {
   ResponseData,
 } from "@/types/api/auth";
 import type { User } from "@/types/module/User";
-import { setToken, removeToken, getToken } from "@/utils/auth";
+import { setToken, removeToken } from "@/utils/auth";
 
 const useUserStore = defineStore("user", {
   state: (): User => {
@@ -19,6 +19,8 @@ const useUserStore = defineStore("user", {
       role: "",
       id: "",
       fullName: "",
+      profileId: "",
+      profileCode: "",
     };
   },
   actions: {
@@ -47,14 +49,10 @@ const useUserStore = defineStore("user", {
     },
 
     async userInfo() {
-      console.log("🚀 ~ userInfo ~ token:", getToken());
-
       const res: UserResult = await reqUserInfo();
       const user: User = res.data;
       if (res.success === true) {
         this.$state = user;
-        console.log("🚀 ~ userInfo ~ this.$state:", this.$state);
-
         return "ok";
       } else {
         return Promise.reject(new Error(res.statusCode as unknown as string));
@@ -62,20 +60,11 @@ const useUserStore = defineStore("user", {
     },
 
     async userLogout() {
-      // const res = await reqLogOut();
-      // if (res.code === 200) {
-      //   this.token = "";
-      //   this.username = "";
-      //   this.avatar = "";
-      removeToken;
-      // dynamicRoutes.forEach((route) => {
-      //   if (route.name) {
-      router.push("/");
-      //       }
-      //     });
-      //   } else {
-      //     return Promise.reject(new Error(res.message));
-      //   }
+      removeToken();
+
+      this.$reset();
+
+      router.push("/login");
     },
   },
 

@@ -64,7 +64,7 @@ export const constantRoute = [
         },
       },
       {
-        path: "/user/profile",
+        path: "/user/profile/:id",
         component: () => import("@/views/user/Profile/index.vue"),
         meta: {
           title: "Profile",

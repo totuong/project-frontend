@@ -9,8 +9,8 @@
         <el-tab-pane label="Doanh thu" name="second">Doanh thu</el-tab-pane>
       </el-tabs>
     </div>
+    <ChatBox />
   </div>
-  <ChatBox/>
 </template>
 
 <script setup lang="ts">
@@ -19,13 +19,12 @@ import type { TabsPaneContext } from "element-plus";
 
 import Filter from "./components/Filter.vue";
 import Table from "./components/TableOrder.vue";
-import ChatBox from "@/components/ChatBox/index.vue"
-
+import ChatBox from "@/components/ChatBox/index.vue";
 
 import { useFilterOrderStore } from "@/store/modules/filterOrder";
 
 const activeName = ref("first");
-const state = ref()
+const state = ref();
 // const state = reactive<StateType>({
 //       table: {
 //         data: [],

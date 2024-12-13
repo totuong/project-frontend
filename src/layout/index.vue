@@ -5,7 +5,7 @@ import Messenger from "./Messenger/index.vue";
 import Order from "./Order/index.vue";
 import useLayOutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import {
   User,
   Search,
@@ -14,8 +14,9 @@ import {
   Setting,
 } from "@element-plus/icons-vue";
 import { Icon } from "@iconify/vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { removeToken } from "@/utils/auth";
+import { convertLocalPathToUrl } from "@/utils/image";
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -45,6 +46,8 @@ const createFilter = (queryString: string) => {
     );
   };
 };
+
+const avatarUrl = computed(() => convertLocalPathToUrl(userStore?.avatar));
 const handleProfileClick = () => {
   router.push("/user/profile"); // Điều hướng tới /user/profile
 };
@@ -55,10 +58,9 @@ const handleChangePasswordClick = () => {
 const handleHomeClick = () => {
   router.push("/user/index"); // Điều hướng tới /user/profile
 };
-const logout =()=>{
-  removeToken()
-  router.push("/login")
-}
+const logout = () => {
+  userStore.userLogout();
+};
 const links = ref<LinkItem[]>([]);
 const loadAll = () => {
   return [
@@ -111,15 +113,33 @@ let LayOutSettingStore = useLayOutSettingStore();
         </div>
         <el-dropdown class="flex" trigger="click">
           <span class="flex flex-row items-center">
-            <Icon class="mr-3" icon="icon-park:avatar" width="26" height="26" />
+            <img
+              v-if="avatarUrl"
+              :src="avatarUrl"
+              alt="Avatar"
+              class="mr-3 rounded-full"
+              width="32"
+              height="32"
+            />
+            <!-- Thay thế bằng icon nếu avatar không tồn tại -->
+            <Icon
+              v-else
+              class="mr-3"
+              icon="icon-park:avatar"
+              width="22"
+              height="32"
+            />
             <!-- v-if="username" -->
-            <p class="text-black">{{ userStore.username }}</p>
+            <p class="text-white text-xl font-bold">{{ userStore.fullName }}</p>
           </span>
           <template #dropdown>
             <el-dropdown-menu class="logout">
-              <el-dropdown-item @click="handleProfileClick">
-                <el-icon> <user /> </el-icon>Profile
-              </el-dropdown-item>
+              <router-link :to="`/user/profile/${userStore.profileCode}`">
+                <el-dropdown-item>
+                  <el-icon> <user /> </el-icon>Profile
+                </el-dropdown-item>
+              </router-link>
+
               <el-dropdown-item @click="handleChangePasswordClick"
                 ><el-icon><Lock /></el-icon>Change Password</el-dropdown-item
               >
