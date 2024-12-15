@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BookForm: typeof import('./src/components/BookForm/index.vue')['default']
     ChatBox: typeof import('./src/components/ChatBox/index.vue')['default']
     CustomSelect: typeof import('./src/components/CustomSelect/index.vue')['default']
     DateRange: typeof import('./src/components/DateRange/index.vue')['default']
@@ -55,6 +56,7 @@ declare module 'vue' {
     Post: typeof import('./src/components/Post/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Tag: typeof import('./src/components/Tag/index.vue')['default']
     VerifyCode: typeof import('./src/components/VerifyCode/index.vue')['default']
   }
 }

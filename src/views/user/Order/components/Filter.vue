@@ -16,6 +16,24 @@
           >
           </CustomSelect>
         </el-form-item>
+        <el-form-item>
+          <CustomSelect
+            v-model="filterOrderStore.artistIds"
+            label="Nghệ sỹ:"
+            clearable
+            style="width: 200px"
+          >
+          </CustomSelect>
+        </el-form-item>
+        <el-form-item>
+          <CustomSelect
+            v-model="filterOrderStore.bookerIds"
+            label="Người đặt:"
+            clearable
+            style="width: 200px"
+          >
+          </CustomSelect>
+        </el-form-item>
       </el-row>
     </el-form>
   </el-card>
@@ -40,7 +58,7 @@ watch(
   dateRange,
   ([from, to]) => {
     filterOrderStore.setFrom(moment(from).format("YYYY-MM-DD"));
-    filterOrderStore.setTo(moment(to).format("YYYY-MM-DD"));
+    filterOrderStore.setTo(moment(to).endOf("month").format("YYYY-MM-DD"));
   },
   { immediate: true }
 );

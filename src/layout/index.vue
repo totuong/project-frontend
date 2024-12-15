@@ -115,9 +115,9 @@ let LayOutSettingStore = useLayOutSettingStore();
           <span class="flex flex-row items-center">
             <img
               v-if="avatarUrl"
-              :src="avatarUrl"
+              :src="avatarUrl ?? '/logo.png'"
               alt="Avatar"
-              class="mr-3 rounded-full"
+              class="mr-3 w-8 h-8 rounded-full object-cover"
               width="32"
               height="32"
             />

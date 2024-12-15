@@ -3,10 +3,10 @@
     <div
       class="profile-page container mx-auto bg-white p-4 rounded-lg shadow-lg"
     >
-      <Bio :data="profile" class="mb-5" @on-update="onGetProfile" />
+      <Bio :data="profile" class="mb-5" @on-update="onGetProfile(userStore.profileCode)" />
       <el-row :gutter="24" class="flex-wrap">
         <el-col :span="8">
-          <InfoTable :data="profile" @on-update="onGetProfile"
+          <InfoTable :data="profile" @on-update="onGetProfile(userStore.profileCode)"
         /></el-col>
         <el-col :span="16">
           <el-container> <Tab :data="profile" /> </el-container

@@ -21,14 +21,38 @@ export type Profile = {
   address: string;
   role: string;
   fullName: string;
-  friendsCount: number;
-  followersCount: number;
-  followingCount: number;
+  totalFriend: number;
+  totalFollower: number;
+  totalFollowing: number;
+  totalBook: number;
   postsCount: number;
   isFollowing: boolean;
   bio: string;
   genre: string[];
+  rate: number;
+  bank: Bank;
   profileCode: string;
+};
+export type Friendship = {
+  status: string;
+  requester: string;
+};
+
+export type Bank = {
+  id: string;
+  bankNumber: string;
+  bankName: string;
+  bankAddress: string;
+  name: string;
+  qr: string;
+};
+export const defaultBank: Bank = {
+  id: "",
+  bankNumber: "",
+  bankName: "",
+  bankAddress: "",
+  name: "",
+  qr: "",
 };
 
 export const defaultProfile: Profile = {
@@ -45,12 +69,15 @@ export const defaultProfile: Profile = {
   gender: "",
   address: "",
   fullName: "",
-  friendsCount: 0,
-  followersCount: 0,
-  followingCount: 0,
+  totalFriend: 0,
+  totalFollower: 0,
+  totalFollowing: 0,
+  totalBook: 0,
   postsCount: 0,
   isFollowing: false,
   bio: "",
   genre: [],
+  bank: defaultBank,
+  rate: 0,
   profileCode: "",
 };

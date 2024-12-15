@@ -6,8 +6,9 @@ import {
   addFriend,
   unfriend,
   checkFriend,
+  saveBankInfo,
 } from "@/api/user";
-import { defaultProfile, type Profile } from "@/types/module/User";
+import { defaultProfile, type Bank, type Profile } from "@/types/module/User";
 import type { Result } from "@/types/api/base";
 import { ref } from "vue";
 import useUserStore from "@/store/modules/user";
@@ -25,6 +26,11 @@ export function useProfile() {
   function onSaveProfile(form: Profile) {
     saveProfile(form);
   }
+
+  function onSaveBankInfo(form: Bank) {
+    saveBankInfo(form);
+  }
+
   function isMyProfile(id: string): boolean {
     return id === myProfileId;
   }
@@ -37,13 +43,11 @@ export function useProfile() {
     response.value = result.data ?? {};
   }
 
- 
   async function onAddFriend(id: string) {
     try {
       const result: Result = await addFriend(id);
       return result.success;
     } catch (error) {
-      console.error("Failed to send friend request:", error);
       return false;
     }
   }
@@ -70,7 +74,7 @@ export function useProfile() {
   async function onCheckFriendStatus(id: string) {
     try {
       const result: Result = await checkFriend(id);
-      return result?.data || "";
+      return result?.data || null;
     } catch (error) {
       return "";
     }
@@ -86,6 +90,7 @@ export function useProfile() {
     onAcceptFriend,
     onUnfriend,
     onCheckFriendStatus,
+    onSaveBankInfo,
     profile,
   };
 }

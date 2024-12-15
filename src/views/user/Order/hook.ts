@@ -1,62 +1,86 @@
 import { ref } from "vue";
-import { downloadRawData, getConfirmations } from "@/api/payment";
-import { useFilterPaymentStoreHook } from "@/store/modules/filterPayment";
+import {
+  getOrders,
+  deleteOrder,
+  updateStatus,
+  updateOrder,
+  createOrder,
+} from "@/api/order";
+import { useFilterOrderStore } from "@/store/modules/filterOrder";
+import type { OrderForm } from "@/types/api/order";
+import type { Result } from "@/types/api/base";
 
-export function usePaymentHook() {
-  const invoices = ref();
+export function useOrderHook() {
+  const orders = ref([]);
+  const loading = ref(false);
   const pagination = ref({
     page: 1,
     total: 0,
   });
+  const type = ref("user");
 
-  const onGetInvoices = async () => {
-    invoices.value = [];
-    const { getQuery } = useFilterPaymentStoreHook();
-
+  async function onGetOrders() {
+    loading.value = true;
+    const { getQuery } = useFilterOrderStore();
     const params = {
       params: {
         ...getQuery,
+        type: type.value,
         page: (pagination.value.page ?? 1) - 1,
         limit: 10,
       },
     };
 
-    const { data, meta } = await getConfirmations(params);
-    invoices.value = data;
-    const { total } = meta;
-    pagination.value.total = total;
-  };
+    const result = await getOrders(params);
+    orders.value = result.data;
+    pagination.value.total = result.meta?.total ?? 0;
+    loading.value = false;
+  }
 
-  const getPayout = (obj: object) => {
-    return obj["publisher_payout_vnd"];
-  };
-  const getPaid = (obj: object) => {
-    return obj["paid"] ?? 0;
-  };
+  async function onUpdateOrder(data: OrderForm) {
+    const result: Result = await updateOrder(data);
+    return result;
+  }
 
-  const onDownloadRawData = async (id: string, offerId: string) => {
-    downloadRawData(id, offerId).then((data) => {
-      const blob = new Blob([data], { type: "text/csv" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = `raw_data`;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    });
-  };
+  async function onUpdateStatus(id: string, status: string, reason?: string) {
+    const result: Result = await updateStatus(id,status,reason);
+    return result;
+  }
+
+  async function onDeleteOrder(id: string) {
+    const result: Result = await deleteOrder(id);
+    return result;
+  }
+
+  async function onCreateOrder(data: OrderForm) {
+    try {
+      const result: Result = await createOrder(data);
+      return result.success;
+    } catch (error) {
+      return false;
+    }
+  }
 
   function onChangePage(val: number) {
     pagination.value.page = val;
-    onGetInvoices();
+    onGetOrders();
+  }
+
+  function onChangeType(val: string) {
+    type.value = val;
   }
 
   return {
-    invoices,
-    pagination,
-    onGetInvoices,
-    getPayout,
-    getPaid,
-    onDownloadRawData,
+    onGetOrders,
+    onCreateOrder,
+    onUpdateOrder,
+    onDeleteOrder,
+    onUpdateStatus,
     onChangePage,
+    onChangeType,
+    orders,
+    type,
+    pagination,
+    loading,
   };
 }

@@ -1,20 +1,30 @@
+import type { Result } from "@/types/api/base";
+import type { OrderForm } from "@/types/api/order";
 import request from "@/utils/request";
 
 const PREDIX = "/user/order";
 
 enum API {
   ORDER_URL = `${PREDIX}`,
-  ORDER_UPDATE_URL = `${PREDIX}`,
   ORDER_CREATE_URL = `${PREDIX}/create`,
+  ORDER_UPDATE_URL = `${PREDIX}/update`,
+  ORDER_UPDATE_STATUS_URL = `${PREDIX}/update-status`,
   ORDER_DELETE_URL = `${PREDIX}/delete`,
 }
 
-export const getOrder = (data: LoginFormData) =>
-  request.post<any, TokenResult>(API.LOGIN_URL, data);
+export const getOrders = (param: any) =>
+  request.get<any, Result>(API.ORDER_URL, param);
 
-export const gerOrderDe = (data: RegisterFormData) =>
-  request.post<any, ResponseData>(API.REGISTER_URL, data);
+export const createOrder = (data: OrderForm) =>
+  request.post<any, Result>(API.ORDER_CREATE_URL, data);
 
-export const deleteOrder = () => request.get<any, UserResult>(API.USERINFO_URL);
+export const updateOrder = (data: OrderForm) =>
+  request.put<any, Result>(API.ORDER_UPDATE_URL, data);
 
-export const reqLogOut = () => request.post<any, any>(API.LOGOUT_URL);
+export const updateStatus = (id: string, status: string, reason?: string) => {
+  return request.put<any, Result>(`${API.ORDER_UPDATE_STATUS_URL}?id=${id}&status=${status}&reason=${reason}`);
+};
+
+export const deleteOrder = (id: string) => {
+  return request.delete<any, Result>(`${API.ORDER_CREATE_URL}/${id}`);
+};

@@ -1,6 +1,6 @@
 import request, { camelCaseToUnderScore } from "@/utils/request";
 import type { Result } from "@/types/api/base";
-import type { Profile } from "@/types/module/User";
+import type { Bank, Profile } from "@/types/module/User";
 
 enum API {
   ORDER_URL = "/user/order",
@@ -20,6 +20,7 @@ enum API {
   PROFILE_UPDATE_URL = "/user/profile/update",
   PROFILE_UPDATE_AVATAR_URL = "/user/profile-avatar",
   PROFILE_UPDATE_COVER_PHOTO_URL = "/user/profile-cover-photo",
+  PROFILE_UPDATE_BANK_URL = "/user/profile/update-bank",
 
   FRIEND_URL = "/friend",
   FRIEND_URL_ADD = "/friend",
@@ -35,7 +36,9 @@ export const getProfile = (code: string) => {
 export const saveProfile = (data: Profile) => {
   return request.put<any, Result>(API.PROFILE_UPDATE_URL, data);
 };
-
+export const saveBankInfo = (data: Bank) => {
+  return request.put<any, Result>(API.PROFILE_UPDATE_BANK_URL, data);
+};
 export const getFriends = () => {
   return request.get<any, Result>(API.FRIEND_URL);
 };
