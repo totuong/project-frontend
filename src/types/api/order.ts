@@ -17,6 +17,11 @@ export type OrderForm = {
   price: number;
 };
 
+export type ShowTop = {
+  key: string;
+  value: number;
+};
+
 export const defaultOrderForm: OrderForm = {
   id: "",
   artistId: "",

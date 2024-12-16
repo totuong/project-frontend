@@ -15,7 +15,6 @@ import {
 } from "@element-plus/icons-vue";
 import { Icon } from "@iconify/vue";
 import { computed, onMounted, ref } from "vue";
-import { removeToken } from "@/utils/auth";
 import { convertLocalPathToUrl } from "@/utils/image";
 
 const userStore = useUserStore();
@@ -48,9 +47,6 @@ const createFilter = (queryString: string) => {
 };
 
 const avatarUrl = computed(() => convertLocalPathToUrl(userStore?.avatar));
-const handleProfileClick = () => {
-  router.push("/user/profile"); // Điều hướng tới /user/profile
-};
 const handleChangePasswordClick = () => {
   router.push("/user/change-password"); // Điều hướng tới /user/profile
 };
@@ -84,7 +80,13 @@ let LayOutSettingStore = useLayOutSettingStore();
     <el-header class="flex flex-row items-center top-0 z-10 fixed w-full">
       <div class="first">
         <el-button size="large" @click="handleHomeClick"
-          ><el-icon class="mr-2"><HomeFilled /></el-icon>Home</el-button
+          ><Icon
+            icon="zondicons:music-artist"
+            width="18"
+            height="18"
+            style="color: #f29191"
+            class="mr-2"
+          />Home</el-button
         >
       </div>
 
@@ -177,7 +179,7 @@ let LayOutSettingStore = useLayOutSettingStore();
   transition: all 0.3s;
 }
 .el-header {
-  background-color: #7a2f2f !important;
+  background-color: #6ba3be !important;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
 }

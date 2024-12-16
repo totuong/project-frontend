@@ -172,30 +172,65 @@ const rules = reactive<FormRules>({
   ],
 });
 
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
-  try {
-    const valid = await formEl.validate();
-    if (valid) {
-      if (type.value === "edit") {
-        await onUpdateOrder(form.value);
-      } else {
-        await onCreateOrder(form.value);
+
+  formEl
+    .validate()
+    .then((valid) => {
+      if (valid) {
+        if (type.value === "edit") {
+          onUpdateOrder(form.value)
+            .then((response) => {
+              if (response.success) {
+                ElMessage.success({
+                  message: "Tạo thành công", // Hiển thị thông báo khi thành công
+                });
+                showForm.value = false;
+                emit("onUpdate");
+              } else {
+                ElMessage.error({
+                  message: response.data || "Error occurred", // Hiển thị lỗi khi thất bại
+                });
+                showForm.value = false;
+              }
+            })
+            .catch((error) => {
+              ElMessage.error({
+                message: error.message || "Something went wrong!",
+              });
+            });
+        } else {
+          onCreateOrder(form.value)
+            .then((response) => {
+              if (response.success) {
+                ElMessage.success({
+                  message: "Tạo thành công", // Hiển thị thông báo khi thành công
+                });
+                showForm.value = false;
+                emit("onUpdate");
+              } else {
+                ElMessage.error({
+                  message: response.data || "Error occurred", // Hiển thị lỗi khi thất bại
+                });
+                showForm.value = false;
+              }
+            })
+            .catch((error) => {
+              ElMessage.error({
+                message: error.message || "Something went wrong!",
+              });
+            });
+        }
       }
-
-      ElMessage.success({
-        message: "Upload Success",
+    })
+    .catch((error) => {
+      ElMessage.error({
+        message: error.message || "Form validation failed!",
       });
-
-      showForm.value = false;
-      emit("onUpdate");
-    }
-  } catch (error) {
-    ElMessage.error({
-      message: error.message || "Something went wrong!",
     });
-  }
 };
+
 const showForm = ref(false);
 const showModel = (valueType: string, data: any) => {
   if (valueType === "edit") {
