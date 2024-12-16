@@ -7,6 +7,7 @@
         class="cover-image w-full h-[400px] object-cover rounded-t-lg"
       />
       <el-tooltip
+        v-if="isMyProfile(data.id)"
         class="box-item"
         effect="dark"
         content="Chỉnh sửa ảnh bìa"
@@ -22,15 +23,16 @@
     </div>
     <el-row :gutter="24" class="relative flex flex-row justify-between mb-4">
       <div class="avatar-container ml-12 flex items-center bottom-0 absolute">
-        <div class="avatar-image">
+        <div>
           <img
             :src="avatarUrl ?? '/logo.png'"
             alt="Avatar"
-            class="avatar-image w-44 h-44 rounded-full border-4 border-white"
+            class="w-44 h-44 rounded-full object-cover border-4 border-white"
           />
         </div>
 
         <el-tooltip
+          v-if="isMyProfile(data.id)"
           class="box-item"
           effect="dark"
           content="Chỉnh sửa ảnh đại diện"
@@ -56,6 +58,13 @@
             v-if="isMyProfile(data.id)"
             type="primary"
             icon="Edit"
+            @click="onShowBankInfo"
+            >Thông tin thanh toán</el-button
+          >
+          <el-button
+            v-if="isMyProfile(data.id)"
+            type="primary"
+            icon="Edit"
             @click="onShow"
             >Chỉnh sửa thông tin cá nhân</el-button
           >
@@ -65,25 +74,53 @@
                 ><Icon icon="weui:add-friends-filled" class="w-5 h-5 mr-2" />
                 Kết bạn</el-button
               >
-              <el-dropdown v-if="statusFriend === 'accepted'">
+              <el-dropdown
+                v-if="statusFriend === 'accepted'"
+                @command="handleCommand"
+              >
                 <el-button>
                   <Icon icon="fa-solid:user-friends" class="w-5 h-5 mr-4" />
                   Bạn bè<el-icon class="el-icon--right"><arrow-down /></el-icon>
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item>Theo dõi</el-dropdown-item>
-                    <el-dropdown-item>Nhắn tin</el-dropdown-item>
-                    <el-dropdown-item>Hủy kết bạn</el-dropdown-item>
-                    <el-dropdown-item>Chặn</el-dropdown-item>
+                    <el-dropdown-item command="follow"
+                      >Theo dõi</el-dropdown-item
+                    >
+                    <el-dropdown-item command="inbox"
+                      >Nhắn tin</el-dropdown-item
+                    >
+                    <el-dropdown-item command="unfriend"
+                      >Hủy kết bạn</el-dropdown-item
+                    >
+                    <el-dropdown-item command="block">Chặn</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-
-              <el-button v-if="statusFriend === 'pending'" @click="unFriend()"
-                ><Icon icon="weui:add-friends-filled" class="w-5 h-5 mr-2" />
-                Hủy lời mời</el-button
-              >
+              <div v-if="statusFriend === 'pending'">
+                <el-button
+                  v-if="friendship?.requester !== data.id"
+                  @click="unFriend()"
+                  ><Icon icon="weui:add-friends-filled" class="w-5 h-5 mr-2" />
+                  Hủy lời mời</el-button
+                >
+                <el-dropdown v-else @command="handleCommand">
+                  <el-button @click="acceptFriend">
+                    <Icon icon="fa-solid:user-friends" class="w-5 h-5 mr-4" />
+                    Chấp nhận<el-icon class="el-icon--right"
+                      ><arrow-down
+                    /></el-icon>
+                  </el-button>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item command="unfriend"
+                        >Hủy yêu cầu</el-dropdown-item
+                      >
+                      <el-dropdown-item command="block">Chặn</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </div>
             </div>
 
             <el-button icon="Message" @click="onShow">Nhắn tin</el-button>
@@ -105,7 +142,8 @@
         </div>
       </el-col>
     </el-row>
-    <edit-info-form ref="editInfoFormRef" />
+    <edit-info-form ref="editInfoFormRef" @on-update="loadPage" />
+    <edit-bank-info ref="editBankFormRef" @on-update="loadPage" />
     <upload-avatar ref="uploadAvatarRef" @on-update="loadPage" />
     <upload-cover-photo ref="uploadCoverPhotoRef" @on-update="loadPage" />
 
@@ -114,25 +152,32 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowDown, Edit, Message } from "@element-plus/icons-vue";
-import { computed, onBeforeMount, ref, watch } from "vue";
+import { ArrowDown, Edit } from "@element-plus/icons-vue";
+import { computed, ref, watch } from "vue";
 import EditInfoForm from "./EditInfoForm.vue";
+import EditBankInfo from "./EditBankInfo.vue";
 import UploadAvatar from "./UploadAvatar.vue";
 import UploadCoverPhoto from "./UploadCoverPhoto.vue";
 import { convertLocalPathToUrl } from "@/utils/image";
-import { type Profile } from "@/types/module/User";
+import { type Profile, type Friendship } from "@/types/module/User";
 import { useProfile } from "../hookProfile";
 import { Icon } from "@iconify/vue";
-// Định nghĩa Props với kiểu đúng
+import { ElMessage } from "element-plus";
 const props = defineProps<{
-  data: Profile; // Đảm bảo bạn chỉ rõ đây là kiểu Profile
+  data: Profile;
 }>();
 
-const { isMyProfile, onAddFriend, onCheckFriendStatus, onUnfriend } =
-  useProfile();
+const {
+  isMyProfile,
+  onAddFriend,
+  onCheckFriendStatus,
+  onUnfriend,
+  onAcceptFriend,
+} = useProfile();
 const emit = defineEmits(["onUpdate"]);
 
 const statusFriend = ref("");
+const friendship = ref<Friendship>();
 
 // Profile data
 const profileData = computed(() => ({
@@ -152,10 +197,14 @@ const loadPage = () => {
 
 // Form chỉnh sửa
 const editInfoFormRef = ref<InstanceType<typeof EditInfoForm>>();
+const editBankFormRef = ref<InstanceType<typeof EditBankInfo>>();
 const uploadAvatarRef = ref<InstanceType<typeof UploadAvatar>>();
 const uploadCoverPhotoRef = ref<InstanceType<typeof UploadCoverPhoto>>();
 const onShow = () => {
   editInfoFormRef.value?.showModel(props.data);
+};
+const onShowBankInfo = () => {
+  editBankFormRef.value?.showModel(props.data.bank);
 };
 const onShowUploadAvatar = () => {
   uploadAvatarRef.value?.onShowModel();
@@ -166,7 +215,8 @@ const onShowUploadCoverPhoto = () => {
 };
 const updateStatusFriend = async (id: string) => {
   if (id) {
-    statusFriend.value = await onCheckFriendStatus(id);
+    friendship.value = await onCheckFriendStatus(id);
+    statusFriend.value = friendship.value?.status ?? "";
   }
 };
 watch(
@@ -190,6 +240,34 @@ const unFriend = async () => {
   const success = await onUnfriend(props.data.id);
   if (success) {
     statusFriend.value = "";
+    friendship.value = undefined;
+  }
+};
+
+const acceptFriend = async () => {
+  const success = await onAcceptFriend(props.data.id);
+  if (success) {
+    statusFriend.value = "accepted";
+  }
+};
+
+const handleCommand = async (command: string | number | object) => {
+  switch (command) {
+    case "follow":
+      ElMessage.success("Bạn đã theo dõi người dùng.");
+      break;
+    case "inbox":
+      ElMessage.info("Mở hộp thoại nhắn tin.");
+      break;
+    case "unfriend":
+      unFriend();
+      break;
+    case "block":
+      ElMessage.warning("Người dùng đã bị chặn.");
+      break;
+    default:
+      ElMessage.error("Lệnh không hợp lệ.");
+      break;
   }
 };
 </script>

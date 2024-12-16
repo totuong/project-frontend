@@ -179,7 +179,7 @@
 import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import { ElInput } from "element-plus";
 import type { InputInstance } from "element-plus";
-import BookForm from "./BookForm.vue";
+import BookForm from "@/components/BookForm/index.vue";
 import { Icon } from "@iconify/vue";
 import { Clock, OfficeBuilding } from "@element-plus/icons-vue";
 
@@ -216,7 +216,7 @@ const bookFormRef = ref<InstanceType<typeof BookForm>>();
 
 // Hàm mở dialog
 const onShow = () => {
-  bookFormRef.value?.showModel(); // Gọi showModel() từ BookForm
+  bookFormRef.value?.showModel("save", form.id);
 };
 
 const handleClose = (tag: string) => {

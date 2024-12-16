@@ -1,4 +1,3 @@
-
 import type { RouteRecordRaw } from "vue-router";
 export interface UserState {
   token: string | null;
@@ -18,5 +17,7 @@ export interface CategoryState {
 export type filterType = {
   from: String;
   to: String;
+  artistIds: string[];
+  bookerIds: string[];
   status?: Array<string>;
 };

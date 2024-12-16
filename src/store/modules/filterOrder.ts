@@ -7,15 +7,18 @@ export const useFilterOrderStore = defineStore({
   state: (): filterType => ({
     from: dayjs().startOf("month").format("YYYY-MM-DD"),
     to: dayjs().endOf("month").format("YYYY-MM-DD"),
-
+    artistIds: [],
+    bookerIds: [],
     status: [],
   }),
   getters: {
     getQuery(state: filterType) {
       const from = state.from;
       const to = state.to;
+      const artistIds = state.artistIds;
+      const bookerIds = state.bookerIds;
       const { status } = state;
-      return { from, to, status };
+      return { from, to,artistIds,bookerIds, status };
     },
   },
   actions: {
@@ -24,6 +27,12 @@ export const useFilterOrderStore = defineStore({
     },
     setTo(to: string) {
       this.to = to;
+    },
+    setArtistIds(artistIds: string[]) {
+      this.artistIds = artistIds;
+    },
+    setBookerIds(bookerIds: string[]) {
+      this.bookerIds = bookerIds;
     },
   },
 });
