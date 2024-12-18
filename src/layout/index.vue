@@ -116,7 +116,6 @@ let LayOutSettingStore = useLayOutSettingStore();
         <el-dropdown class="flex" trigger="click">
           <span class="flex flex-row items-center">
             <img
-              v-if="avatarUrl"
               :src="avatarUrl ?? '/logo.png'"
               alt="Avatar"
               class="mr-3 w-8 h-8 rounded-full object-cover"
@@ -124,14 +123,7 @@ let LayOutSettingStore = useLayOutSettingStore();
               height="32"
             />
             <!-- Thay thế bằng icon nếu avatar không tồn tại -->
-            <Icon
-              v-else
-              class="mr-3"
-              icon="icon-park:avatar"
-              width="22"
-              height="32"
-            />
-            <!-- v-if="username" -->
+
             <p class="text-white text-xl font-bold">{{ userStore.fullName }}</p>
           </span>
           <template #dropdown>

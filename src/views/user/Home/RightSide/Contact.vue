@@ -16,7 +16,10 @@
             class="profile-item flex items-center space-x-2 py-2 cursor-pointer"
           >
             <img
-              :src="item.avatar ?? '/default-artist-avatar.jpg'"
+              :src="
+                convertLocalPathToUrl(item.avatar) ??
+                '/logo.png'
+              "
               alt="Avatar"
               class="w-8 h-8 rounded-full object-cover"
             />
@@ -35,6 +38,7 @@ import { useUserHome } from "../hook";
 import { onBeforeMount, ref } from "vue";
 import Tag from "@/components/Tag/index.vue";
 import BookForm from "@/components/BookForm/index.vue";
+import { convertLocalPathToUrl } from "@/utils/image";
 
 const { onGetFriends, friends } = useUserHome();
 const bookFormRef = ref<InstanceType<typeof BookForm>>();

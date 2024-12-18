@@ -7,7 +7,9 @@
         <router-link :to="`/user/profile/${data.profileCode}`">
           <img
             :src="
-              data.avatar ?? data.role === 'ARTIST'
+              convertLocalPathToUrl(data.avatar)
+                ? convertLocalPathToUrl(data.avatar)
+                : data.role === 'ARTIST'
                 ? '/default-artist-avatar.jpg'
                 : '/logo.png'
             "
@@ -117,6 +119,7 @@
 
 <script setup lang="ts">
 import type { Profile } from "@/types/module/User";
+import { convertLocalPathToUrl } from "@/utils/image";
 import { Icon } from "@iconify/vue";
 
 const props = defineProps<{
