@@ -22,7 +22,7 @@ router.beforeEach(async (to, from, next) => {
   const username=userStore.username
   if (token) {
     if (to.path === "/login") {
-      next({ path: "/user" });
+      next({ path: "/" });
     } else {
       if (username) {
         console.log("🚀 ~ router.beforeEach ~ username:", username)

@@ -1,5 +1,5 @@
 <template>
-  <div class="common-layout h-full bg-[#f2f2ee]">
+  <div class="common-layout h-full bg-[#f1f2f7]">
     <el-container class="w-full">
       <SideLeft class="side-left" />
       <div class="flex-auto overflow-y-auto">

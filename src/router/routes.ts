@@ -17,32 +17,32 @@ export const constantRoute = [
       auth: false,
     },
   },
+  // {
+  //   path: "/",
+  //   component: () => import("@/layout/index.vue"),
+  //   name: "Home",
+  //   meta: {
+  //     title: "",
+  //     hidden: false,
+  //     auth: false,
+  //     icon: "",
+  //   },
+  //   redirect: "/home",
+  //   children: [
+  //     {
+  //       path: "/home",
+  //       component: () => import("@/views/home/index.vue"),
+  //       meta: {
+  //         title: "Home",
+  //         hidden: false,
+  //         auth: false,
+  //         icon: "HomeFilled",
+  //       },
+  //     },
+  //   ],
+  // },
   {
     path: "/",
-    component: () => import("@/layout/index.vue"),
-    name: "Home",
-    meta: {
-      title: "",
-      hidden: false,
-      auth: false,
-      icon: "",
-    },
-    redirect: "/home",
-    children: [
-      {
-        path: "/home",
-        component: () => import("@/views/home/index.vue"),
-        meta: {
-          title: "Home",
-          hidden: false,
-          auth: false,
-          icon: "HomeFilled",
-        },
-      },
-    ],
-  },
-  {
-    path: "/user",
     component: () => import("@/layout/index.vue"),
     name: "user",
     meta: {

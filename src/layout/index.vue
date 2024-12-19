@@ -6,13 +6,7 @@ import Order from "./Order/index.vue";
 import useLayOutSettingStore from "@/store/modules/setting";
 import useUserStore from "@/store/modules/user";
 import { useRouter } from "vue-router";
-import {
-  User,
-  Search,
-  Lock,
-  HomeFilled,
-  Setting,
-} from "@element-plus/icons-vue";
+import { User, Search, Lock, Setting } from "@element-plus/icons-vue";
 import { Icon } from "@iconify/vue";
 import { computed, onMounted, ref } from "vue";
 import { convertLocalPathToUrl } from "@/utils/image";
@@ -51,9 +45,6 @@ const handleChangePasswordClick = () => {
   router.push("/user/change-password"); // Điều hướng tới /user/profile
 };
 
-const handleHomeClick = () => {
-  router.push("/user/index"); // Điều hướng tới /user/profile
-};
 const logout = () => {
   userStore.userLogout();
 };
@@ -79,20 +70,19 @@ let LayOutSettingStore = useLayOutSettingStore();
   <el-container class="layout-container-demo" style="height: 100vh">
     <el-header class="flex flex-row items-center top-0 z-10 fixed w-full">
       <div class="first">
-        <el-button size="large" @click="handleHomeClick"
+        <el-tooltip content="Trang chủ">
+        <router-link :to="'/user/index'"
           ><Icon
-            icon="zondicons:music-artist"
-            width="18"
-            height="18"
-            style="color: #f29191"
-            class="mr-2"
-          />Home</el-button
-        >
+            icon="twemoji:man-singer-light-skin-tone"
+            width="2.5em"
+            height="2.5em"
+        /></router-link>
+      </el-tooltip>
       </div>
 
-      <div class="second w-64 ml-20 rounded-xl">
+      <div class="w-64 ml-20">
         <el-autocomplete
-          class="w-[240px]"
+          class="search-custom"
           v-model="state"
           size="large"
           :fetch-suggestions="querySearchAsync"
@@ -178,4 +168,5 @@ let LayOutSettingStore = useLayOutSettingStore();
 .el-main {
   padding: 0;
 }
+
 </style>

@@ -15,3 +15,4 @@ export type Order = {
   note: string;
   price: number;
 };
+

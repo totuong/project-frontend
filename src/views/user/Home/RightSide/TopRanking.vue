@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 w-full">
     <div class="header flex items-center space-x-2 bg-gray-100 p-2 rounded">
-      <Icon icon="mdi:account-multiple-plus" class="text-black" />
+      <Icon icon="ph:ranking-duotone" width="1.2em" height="1.2em"  />
       <span class="font-semibold">Top nghệ sĩ</span>
     </div>
     <div class="suggested-friends-list mt-2 px-1">
