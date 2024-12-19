@@ -16,7 +16,7 @@
     >
       <el-table-column type="expand">
         <template #default="{ row }">
-          <el-row :gutter="24">
+          <el-row :gutter="24" class="px-10">
             <el-col :span="12">
               <el-descriptions
                 direction="vertical"
@@ -27,11 +27,12 @@
                 <el-descriptions-item
                   :rowspan="3"
                   :width="140"
+                  :hight="140"
                   label="Booker"
                   align="center"
                 >
-                  <el-image
-                    class="w-fit h-fit"
+                  <img
+                    class="h-[124px] object-cover"
                     :src="
                       row.booker.avatar
                         ? convertLocalPathToUrl(row.booker.avatar)
@@ -66,8 +67,8 @@
                   label="Artist"
                   align="center"
                 >
-                  <el-image
-                    class="w-fit h-fit"
+                  <img
+                    class="h-[124px] object-cover"
                     :src="
                       row.artist.avatar
                         ? convertLocalPathToUrl(row.artist.avatar)
@@ -91,7 +92,7 @@
             >
           </el-row>
 
-          <div class="mt-4" m="4">
+          <div class="my-4 px-10" m="4">
             <p v-if="row.totalTime" class="font-bold" m="t-0 b-2">
               Tổng thời gian:
               <span class="font-normal">{{ row.totalTime }}</span>
@@ -161,7 +162,7 @@
       />
       <el-table-column label="Status" prop="status">
         <template #default="scope">
-          <el-tag effect="dark">
+          <el-tag effect="dark" :type="getTagType(scope.row.status)">
             {{ scope.row.status }}
           </el-tag></template
         >
@@ -173,28 +174,51 @@
         align="center"
       >
         <template #default="scope">
-          <el-button v-if="type === 'user'" plain @click="onEdit(scope.row)"
+          <el-button
+            v-if="type === 'user' && scope.row.status === 'pending'"
+            plain
+            @click="onEdit(scope.row)"
             >Edit</el-button
           >
-          <el-button v-if="type === 'user'" plain @click="showBank(scope.row)"
+          <el-button
+            v-if="
+              type === 'user' &&
+              scope.row.status !== 'cancel' &&
+              scope.row.status !== 'deleted'
+            "
+            plain
+            @click="showBank(scope.row)"
             >Thanh toán</el-button
           >
           <el-button
             v-if="type === 'artist'"
+            :disabled="scope.row.status !== 'pending'"
             type="success"
             plain
-            @click="updateStatus(scope.row.id)"
-            >Xác nhận</el-button
-          >
+            @click="updateStatus(scope.row.id, 'confirmed')"
+            >{{
+              scope.row.status === "pending"
+                ? "Xác nhận"
+                : scope.row.status === "confirmed"
+                ? "Đã xác nhận"
+                : "Đã xóa"
+            }}
+          </el-button>
           <el-button
             v-if="type === 'user'"
+            :disabled="
+              scope.row.status === 'deleted' ||
+              scope.row.status === 'confirmed' ||
+              scope.row.status === 'success'
+            "
             type="info"
             plain
-            @click="deleteOrder(scope.row.id)"
+            @click="updateStatus(scope.row.id, 'deleted')"
             >Hủy</el-button
           >
           <el-button
             v-if="type === 'artist'"
+            :disabled="scope.row.status !== 'pending'"
             type="info"
             plain
             @click="cancelOrder(scope.row.id)"
@@ -204,8 +228,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="total > 0"
-      class="pagination"
+      class="mt-4"
       background
       layout="total, prev, pager, next"
       :total="total"
@@ -235,7 +258,7 @@ const bookFormRef = ref<InstanceType<typeof BookForm>>();
 const bankInfoRef = ref<InstanceType<typeof BankInfo>>();
 const cancelFormRef = ref<InstanceType<typeof CancelForm>>();
 
-const { onUpdateStatus, onDeleteOrder } = useOrderHook();
+const { onUpdateStatus } = useOrderHook();
 
 const parentBorder = ref(false);
 const formatMoney = (row: any, column: any, cellValue: number) =>
@@ -278,14 +301,15 @@ const onEdit = (data: OrderForm) => {
   bookFormRef.value?.showModel("edit", data);
 };
 
-const updateStatus = async (id: string) => {
+const updateStatus = async (id: string, status: string, reason?: string) => {
   try {
-    await onUpdateStatus(id);
-
+    await onUpdateStatus(id, status, reason);
+    setTimeout(() => {
+      emit("onUpdate");
+    }, 500);
     ElMessage.success({
       message: "Success",
     });
-    emit("onUpdate");
   } catch (error) {
     ElMessage.error({
       message: error.message || "Something went wrong!",
@@ -297,23 +321,8 @@ const onLoad = () => {
   emit("onUpdate");
 };
 
-const deleteOrder = async (id: string) => {
-  try {
-    await onUpdateStatus(id, "DELETED");
-
-    ElMessage.success({
-      message: "Success",
-    });
-    emit("onUpdate");
-  } catch (error) {
-    ElMessage.error({
-      message: error.message || "Something went wrong!",
-    });
-  }
-};
-
 const cancelOrder = async (id: string) => {
-  cancelFormRef.value.showModel(id);
+  cancelFormRef.value?.showModel(id);
 };
 const showBank = (data: Order) => {
   bankInfoRef.value?.showModel(data);
@@ -321,6 +330,23 @@ const showBank = (data: Order) => {
 
 const formatDateTime = (datetime: string) => {
   return dayjs(datetime).format("HH:mm DD-MM");
+};
+
+const getTagType = (status: string): string => {
+  switch (status) {
+    case "cancel":
+      return "danger";
+    case "success":
+      return "success";
+    case "deleted":
+      return "warning";
+    case "pending":
+      return "primary";
+    case "confirmed":
+      return "info";
+    default:
+      return "";
+  }
 };
 
 // Function to toggle expand/collapse for all rows

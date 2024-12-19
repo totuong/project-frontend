@@ -26,7 +26,7 @@ const id = ref<string>("");
 
 const onSubmit = () => {
   try {
-    onUpdateStatus(id.value, "CANCEL", form.reason);
+    onUpdateStatus(id.value, "cancel", form.reason);
 
     ElMessage.success({
       message: "Success",

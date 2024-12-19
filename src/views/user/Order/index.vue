@@ -12,10 +12,14 @@
             :tableData="orders"
             :loading="loading"
             :type="type"
+            @on-update="onGetOrders"
             :pagination="pagination"
             @onChangePage="onChangePage"
         /></el-tab-pane>
-        <el-tab-pane label="Danh sách nhận" name="artist"
+        <el-tab-pane
+          v-if="activeName === 'artist'"
+          label="Danh sách nhận"
+          name="artist"
           ><Table
             :tableData="orders"
             :loading="loading"
@@ -23,7 +27,12 @@
             :pagination="pagination"
             @onChangePage="onChangePage"
         /></el-tab-pane>
-        <el-tab-pane label="Doanh thu" name="second">Doanh thu</el-tab-pane>
+        <el-tab-pane
+          v-if="activeName === 'artist'"
+          label="Doanh thu"
+          name="third"
+          ><Revenue v-if="show" />
+        </el-tab-pane>
       </el-tabs>
     </div>
     <ChatBox />
@@ -31,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import type { TabPaneName } from "element-plus";
 
 import Filter from "./components/Filter.vue";
@@ -40,23 +49,29 @@ import ChatBox from "@/components/ChatBox/index.vue";
 import { useOrderHook } from "./hook";
 import { useFilterOrderStore } from "@/store/modules/filterOrder";
 import useUserStore from "@/store/modules/user";
+import Revenue from "./components/Revenue.vue";
 const userStore = useUserStore();
 const {
   onGetOrders,
   onChangePage,
   onChangeType,
+  onGetShowTop,
   orders,
   loading,
   pagination,
   type,
 } = useOrderHook();
 
-const activeName = computed(() => {
-  return userStore.role === "USER" ? "user" : "artist";
-});
+const activeName = userStore.role === "USER" ? "user" : "artist";
+const show = ref(false);
 
 const handleChangeTab = (name: TabPaneName) => {
-  if (name !== "user" && name !== "artist") return;
+  if (name !== "user" && name !== "artist") {
+    show.value = true;
+    onGetShowTop();
+    return;
+  }
+  show.value = false;
   onChangeType(name); // Sử dụng tab.name thay vì tabName
 
   onGetOrders();
@@ -68,8 +83,8 @@ watch(filterOrderStore, () => {
 });
 
 onBeforeMount(() => {
-  onChangeType(activeName.value);
-  onGetOrders();
+  onChangeType(activeName);
+  handleChangeTab(activeName);
 });
 </script>
 

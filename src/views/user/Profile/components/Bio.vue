@@ -55,7 +55,7 @@
       <el-col :span="10" class="flex justify-end content-center">
         <div class="w-full flex justify-end space-x-2">
           <el-button
-            v-if="isMyProfile(data.id)"
+            v-if="isMyProfile(data.id) && data.role === 'ARTIST'"
             type="primary"
             icon="Edit"
             @click="onShowBankInfo"
