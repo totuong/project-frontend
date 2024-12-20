@@ -3,7 +3,7 @@
     <!-- <el-main class="flex-auto"> -->
       <!-- <el-scrollbar class="h-full"> -->
         <div class="mt-4 min-w-[350px] w-4/5 flex-col ">
-          <CreatePost />
+          <CreatePost/>
           <!-- Posts Section -->
           <PostMain />
         </div>
@@ -14,5 +14,6 @@
 <script setup lang="ts">
 import CreatePost from "./CreatePost.vue";
 import PostMain from "./PostMain.vue";
+
 </script>
 <style lang="scss"></style>

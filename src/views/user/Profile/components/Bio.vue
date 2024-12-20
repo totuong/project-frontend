@@ -159,7 +159,7 @@ import EditBankInfo from "./EditBankInfo.vue";
 import UploadAvatar from "./UploadAvatar.vue";
 import UploadCoverPhoto from "./UploadCoverPhoto.vue";
 import { convertLocalPathToUrl } from "@/utils/image";
-import { type Profile, type Friendship } from "@/types/module/User";
+import { type Profile, type Friendship } from "@/types/modules/User";
 import { useProfile } from "../hookProfile";
 import { Icon } from "@iconify/vue";
 import { ElMessage } from "element-plus";

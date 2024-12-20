@@ -69,7 +69,7 @@
           >
           <a href="#" class="hover:underline">Settings</a>
         </div>
-        <div class="text-gray-500 text-xs mt-2">Meta © 2024</div>
+        <div class="text-gray-500 text-xs mt-2">Tô Tường © 2024</div>
       </div>
     </div>
 

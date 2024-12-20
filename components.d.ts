@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BookForm: typeof import('./src/components/BookForm/index.vue')['default']
     ChatBox: typeof import('./src/components/ChatBox/index.vue')['default']
+    Comment: typeof import('./src/components/Post/Comment.vue')['default']
     CustomSelect: typeof import('./src/components/CustomSelect/index.vue')['default']
     DateRange: typeof import('./src/components/DateRange/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
@@ -16,6 +17,7 @@ declare module 'vue' {
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBadge: typeof import('element-plus/es')['ElBadge']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCalendar: typeof import('element-plus/es')['ElCalendar']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElCol: typeof import('element-plus/es')['ElCol']
@@ -24,6 +26,7 @@ declare module 'vue' {
     ElDescriptions: typeof import('element-plus/es')['ElDescriptions']
     ElDescriptionsItem: typeof import('element-plus/es')['ElDescriptionsItem']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -38,6 +41,7 @@ declare module 'vue' {
     ElMain: typeof import('element-plus/es')['ElMain']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
@@ -52,13 +56,21 @@ declare module 'vue' {
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    HidePost: typeof import('./src/components/Post/HidePost.vue')['default']
+    History: typeof import('./src/components/ReviewForm/History.vue')['default']
     Post: typeof import('./src/components/Post/index.vue')['default']
     PostComment: typeof import('./src/components/Post/PostComment.vue')['default']
     PostContent: typeof import('./src/components/Post/PostContent.vue')['default']
+    PostDetail: typeof import('./src/components/Post/PostDetail.vue')['default']
     PostHeader: typeof import('./src/components/Post/PostHeader.vue')['default']
+    ReviewForm: typeof import('./src/components/ReviewForm/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Schedule: typeof import('./src/components/BookForm/Schedule.vue')['default']
     Tag: typeof import('./src/components/Tag/index.vue')['default']
     VerifyCode: typeof import('./src/components/VerifyCode/index.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

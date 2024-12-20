@@ -2,14 +2,14 @@
   <div>
     <div class="create-post bg-slate-50 p-4 mb-4 shadow-md rounded">
       <div class="flex items-center">
-        <button>
+        <button >
           <el-avatar
-            src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+            :src="convertLocalPathToUrl(profile.avatar)??profile.role==='USER'?'/logo.png':'/default-artist-avatar.jpg'"
             size="large"
           />
         </button>
 
-        <div class="input-container w-full rounded-2xl h-14 border">
+        <div class="input-container w-full rounded-2xl h-14 border ml-2">
           <input
             type="text"
             ref="inputRef"
@@ -30,6 +30,7 @@
     <!-- Reference tới CreatePostTemplate -->
     <CreatePostTemplate
       ref="createPostTemplateRef"
+      :profile="profile"
       :content="content"
       @update:content="updateContent"
     />
@@ -41,6 +42,17 @@ import { ref } from "vue";
 import CreatePostTemplate from "./CreatePostTemplate.vue";
 import { Calendar, Location, PictureFilled } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+
+import { useProfile } from "../../Profile/hookProfile";
+import useUserStore from "@/store/modules/user";
+import { onBeforeMount } from "vue";
+import { convertLocalPathToUrl } from "@/utils/image";
+
+
+const {onGetProfile,profile}=useProfile();
+onBeforeMount(()=>{
+  onGetProfile(useUserStore().profileCode);
+})
 const inputRef = ref<HTMLInputElement | null>(null); // ref cho input
 const createPostTemplateRef = ref<InstanceType<typeof CreatePostTemplate>>();
 const content = ref("");

@@ -17,6 +17,7 @@ request.interceptors.request.use(
     if (token) {
       config.headers.Authorization = formatToken(token);
     }
+
     return config;
   },
   (error) => {

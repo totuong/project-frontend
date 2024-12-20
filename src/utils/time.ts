@@ -14,6 +14,7 @@ export const getTime = () => {
 };
 
 export const formatTimeAgo = (createdAt: Date | string): string => {
+  if (!createdAt) return '';
   const createdDate =
     typeof createdAt === "string"
       ? new Date(createdAt.replace(" ", "T")) // Chuyển đổi chuỗi thành Date

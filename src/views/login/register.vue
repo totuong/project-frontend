@@ -104,7 +104,7 @@
           <el-col>
             <el-form-item prop="termsConditions">
               <el-checkbox v-model="termsConditions">
-                <div flex>
+                <div class="flex flex-row items-center">
                   Đồng ý với điều khoản của chúng tôi
                   <el-link
                     href="https://element-plus.org"
@@ -162,7 +162,7 @@ const termsConditions = ref(false);
 const registerFormRules: FormRules = {
   username: [validator.username, validator.required],
   password: [validator.required, validator.password],
-  fullName: [validator.fullName],
+  fullName: [validator.required, validator.fullName],
   confirmPassword: [
     {
       type: "string",

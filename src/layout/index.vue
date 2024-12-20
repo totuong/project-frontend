@@ -71,7 +71,7 @@ let LayOutSettingStore = useLayOutSettingStore();
     <el-header class="flex flex-row items-center top-0 z-10 fixed w-full">
       <div class="first">
         <el-tooltip content="Trang chủ">
-        <router-link :to="'/user/index'"
+        <router-link :to="'/'"
           ><Icon
             icon="twemoji:man-singer-light-skin-tone"
             width="2.5em"

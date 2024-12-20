@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { getProfile } from "@/api/user";
-import type {} from "@/types/api/user";
-import type { Profile } from "@/types/module/User";
-import type { Result } from "@/types/api/base";
+import { getProfile } from "@/apis/user";
+import type {} from "@/types/apis/user";
+import type { Profile } from "@/types/modules/User";
+import type { Result } from "@/types/apis/base";
 import useUserStore from "./user";
 
 

@@ -21,7 +21,7 @@
 import { onBeforeMount, watch } from "vue";
 import Bio from "./components/Bio.vue";
 import InfoTable from "./components/InfoTable.vue";
-import Tab from "./components/Tab.vue";
+import Tab from "./components/TabSection.vue";
 import ChatBox from "@/components/ChatBox/index.vue";
 import { useProfile } from "./hookProfile";
 import { useRoute } from "vue-router";

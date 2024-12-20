@@ -1,14 +1,14 @@
 import { defineStore } from "pinia";
 import router from "@/router";
-import { reqLogin, reqUserInfo, reqRegister } from "@/api/auth";
+import { reqLogin, reqUserInfo, reqRegister } from "@/apis/auth";
 import type {
   LoginFormData,
   RegisterFormData,
   TokenResult,
   UserResult,
   ResponseData,
-} from "@/types/api/auth";
-import type { User } from "@/types/module/User";
+} from "@/types/apis/auth";
+import type { User } from "@/types/modules/User";
 import { setToken, removeToken } from "@/utils/auth";
 
 const useUserStore = defineStore("user", {

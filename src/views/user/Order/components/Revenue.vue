@@ -2,30 +2,30 @@
   <div class="offer-chart">
     <el-row :gutter="24" class="show-top">
       <el-col :span="12">
-        <show-top :loading="loading" />
+        <show-top-component :loading="loading" :data="data" />
       </el-col>
       <el-col :span="12">
-        <show-top :loading="loading" type="pie" />
+        <show-top-component :loading="loading" :data="data" type="pie" />
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import ShowTop from "./ShowTop.vue";
+import type { ShowTop } from "@/types/modules/Order";
+import { type PropType } from "vue";
+import ShowTopComponent from "./ShowTop.vue";
 
-// State để điều khiển loading
-const loading = ref(true);
-
-// Khi component được mounted, bạn có thể bắt đầu quá trình tải dữ liệu (hoặc có thể bắt đầu khi tab được click)
-onMounted(() => {
-  setTimeout(() => {
-    loading.value = false; // Sau 2 giây, loading sẽ biến mất
-  }, 2000); // Giả sử sau 2 giây sẽ tải xong
+defineProps({
+  data: {
+    type: Array as PropType<ShowTop[]>,
+    default: () => [],
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

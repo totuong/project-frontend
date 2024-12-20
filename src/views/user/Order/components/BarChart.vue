@@ -39,7 +39,7 @@ export default defineComponent({
     const columnTargets = shallowRef<number[]>([])
 
     const generateData = () => {
-      labels.value = props.values.map((v) => v.key.split('@')[0])
+      labels.value = props.values.map((v) => v.key)
       columnValues.value = props.values.map((v) => v.value)
       columnTargets.value = props.values.map((v) => v.target)
     }
@@ -55,9 +55,7 @@ export default defineComponent({
             color: 'rgba(0, 0, 0, 0.6)'
           },
           trigger: 'axis',
-          axisPointer: {
-            type: 'line'
-          },
+       
           formatter(params: any) {
             let result = '<div style="text-align: left;">'
             params.forEach((param: any, index: any) => {
@@ -73,7 +71,7 @@ export default defineComponent({
           }
         },
         legend: {
-          data: ['Revenue', 'Revenue Target'],
+          data: ['Revenue'],
           bottom: 'auto'
         },
         grid: {
@@ -129,20 +127,7 @@ export default defineComponent({
               }
             }
           },
-          {
-            name: 'Revenue Target',
-            type: 'bar',
-            data: columnTargets.value,
-            animationDuration,
-            label: {
-              show: true,
-              position: 'inside',
-              valueAnimation: true,
-              formatter(params: any) {
-                return numberFormatter(params.value)
-              }
-            }
-          }
+         
         ]
       })
     }

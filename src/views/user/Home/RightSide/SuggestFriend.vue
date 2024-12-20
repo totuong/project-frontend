@@ -48,7 +48,7 @@
               />
               <span>{{ item.fullName }}</span>
             </div>
-            <el-button link @click="acceptFriend(item.id)">
+            <el-button link @click="addFriend(item.id)">
               Gửi lời mời kết bạn
             </el-button>
           </div>

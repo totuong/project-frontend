@@ -1,7 +1,6 @@
 <template>
   <div>
     <div class="post-content mb-2">
-      <h3 class="text-lg font-bold mb-1">{{ data.title }}</h3>
       <p>{{ data.content }}</p>
     </div>
 
@@ -11,7 +10,7 @@
         <!-- Hiển thị hình ảnh -->
         <el-image
           v-if="media.type === 'image'"
-          :src="media.url"
+          :src="convertLocalPathToUrl(media.url)"
           alt="Media"
           :zoom-rate="1.2"
           :max-scale="3"
@@ -23,7 +22,7 @@
         <!-- Hiển thị video -->
         <video
           v-if="media.type === 'video'"
-          :src="media.url"
+          :src="convertLocalPathToUrl(media.url)"
           controls
           class="object-cover rounded"
         ></video>
@@ -34,7 +33,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { type Post } from "@/types/module/Post";
+import { type Post } from "@/types/modules/Post";
+import { convertLocalPathToUrl } from "@/utils/image";
 
 const props = defineProps<{
   data: Post;
@@ -43,18 +43,14 @@ const props = defineProps<{
 const imageList = computed(() => {
   return props.data.medias
     .filter((media) => media.type === "image")
-    .map((media) => media.url);
+    .map((media) => convertLocalPathToUrl(media.url));
 });
 
-const displayedMedia = computed(() => {
-  // Hiển thị tối đa 4 phương tiện
-  return props.data.medias.slice(0, 4);
-});
 
 // Tính toán lớp CSS cho grid layout dựa trên số lượng media
 const mediaGridClass = computed(() => {
   const count = props.data.medias.length;
-  if (count === 1) return "grid-cols-1";
+  if (count === 1) return "grid-cols-1 h-[440px]";
   if (count === 2) return "grid-cols-2";
   if (count === 3) return "grid-cols-3";
   return "grid-cols-2 grid-rows-2"; // 4+ media
