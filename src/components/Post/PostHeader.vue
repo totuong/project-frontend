@@ -36,6 +36,7 @@
             {{ data.createtAt }}
           </template>
           <div class="text-gray-500 text-sm mr-1">
+            <!-- {{ formatTimeAgo(data?.createtAt) ?? `2 giờ trước` }} -->
             {{ data?.createtAt ?? `2 giờ trước` }}
           </div>
         </el-tooltip>
@@ -101,6 +102,7 @@
 
 <script setup lang="ts">
 import { convertLocalPathToUrl } from "@/utils/image";
+import { formatTimeAgo } from "@/utils/time";
 import { Icon } from "@iconify/vue";
 defineProps({
   data: {
