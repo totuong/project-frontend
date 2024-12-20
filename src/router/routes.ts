@@ -42,7 +42,7 @@ export const constantRoute = [
   //   ],
   // },
   {
-    path: "/",
+    path: "/user",
     component: () => import("@/layout/index.vue"),
     name: "user",
     meta: {

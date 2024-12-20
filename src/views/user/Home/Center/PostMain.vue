@@ -14,7 +14,7 @@ const posts = ref([
     userName: "John Doe",
     avatar:
       "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-    timestamp: "2 hours ago",
+    createdAt: "2024-12-19 15:34:57.13156",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     media:
       "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
@@ -24,7 +24,7 @@ const posts = ref([
         userName: "Jane Smith",
         avatar:
           "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-        timestamp: "1 hour ago",
+          createdAt: "2024-12-19 15:34:57.13156",
         content: "This is a comment.",
       },
     ],
@@ -33,7 +33,7 @@ const posts = ref([
     userName: "John Doe",
     avatar:
       "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-    timestamp: "2 hours ago",
+      createdAt: "2024-12-19 15:34:57.13156",
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     media:
       "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
@@ -43,7 +43,7 @@ const posts = ref([
         userName: "Jane Smith",
         avatar:
           "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
-        timestamp: "1 hour ago",
+          createdAt: "2024-12-19 15:34:57.13156",
         content: "This is a comment.",
       },
     ],
