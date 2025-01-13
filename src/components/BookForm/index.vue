@@ -1,55 +1,91 @@
 <template>
-  <el-dialog v-model="showForm" :draggable="true" :show-close="false" overflow>
+  <el-dialog
+    v-model="showForm"
+    :draggable="true"
+    :show-close="false"
+    overflow
+    width="940px"
+  >
     <template #header>
-      <div class="title pb-4 font-bold text-2xl text-center">Tạo đơn</div>
+      <el-row :gutter="24">
+        <el-col :span="16">
+          <div class="title pb-4 font-bold text-2xl text-center">Tạo đơn</div>
+        </el-col>
+        <el-col :span="7">
+          <div class="title pb-4 font-bold text-2xl text-center">
+            Lịch trình đã bận
+          </div></el-col
+        >
+      </el-row>
       <hr class="header-divider" />
     </template>
-    <el-form
-      ref="ruleFormRef"
-      style="max-width: 800px"
-      :model="form"
-      :rules="rules"
-      label-width="auto"
-      class="demo-ruleForm"
-      :size="formSize"
-      status-icon
-    >
-      <el-row>
-        <el-form-item label="Thời gian từ" prop="from">
-          <el-date-picker
-            v-model="form.from"
-            type="datetime"
-            placeholder="Select date and time"
-          />
-        </el-form-item>
-        <el-form-item label="Đến" prop="to">
-          <el-date-picker
-            v-model="form.to"
-            type="datetime"
-            placeholder="Select date and time"
-          />
-        </el-form-item>
-      </el-row>
+    <el-row :gutter="24"> </el-row>
+    <el-row :gutter="24">
+      <el-col :span="15">
+        <el-form
+          ref="ruleFormRef"
+          style="max-width: 800px"
+          :model="form"
+          :rules="rules"
+          label-width="auto"
+          class="demo-ruleForm"
+          :size="formSize"
+          status-icon
+        >
+          <el-row>
+            <el-form-item label="Thời gian từ" prop="from">
+              <el-date-picker
+                v-model="form.from"
+                type="datetime"
+                placeholder="Select date and time"
+              />
+            </el-form-item>
+          </el-row>
+          <el-row :gutter="24">
+            <el-col :span="14">
+              <el-form-item label="Đến" prop="to">
+                <el-date-picker
+                  v-model="form.to"
+                  type="datetime"
+                  placeholder="Select date and time"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="10">
+              <el-form-item label="Tổng">
+                <el-input v-model="totalTime" disabled /> </el-form-item
+            ></el-col>
+          </el-row>
+          <el-form-item label="Giá" prop="price">
+            <el-input
+              v-model="form.price"
+              placeholder="200.000"
+              clearable
+              @input="onPriceInput"
+              :formatter="formatCurrency"
+              :parser="parseCurrency"
+            >
+              <template #prepend>VND</template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="Địa điểm" prop="address">
+            <el-input v-model="form.address" />
+          </el-form-item>
+          <el-form-item label="Công ty" prop="company">
+            <el-input v-model="form.company" />
+          </el-form-item>
 
-      <el-form-item label="Total Time" class="mt-4">
-        <el-input v-model="totalTime" disabled />
-      </el-form-item>
-      <el-form-item label="Price" prop="price">
-        <el-input v-model="form.price" placeholder="200000">
-          <template #prepend>VND</template>
-        </el-input>
-      </el-form-item>
-      <el-form-item label="Địa điểm" prop="address">
-        <el-input v-model="form.address" />
-      </el-form-item>
-      <el-form-item label="Công ty" prop="company">
-        <el-input v-model="form.company" />
-      </el-form-item>
-
-      <el-form-item label="Note" prop="note">
-        <el-input v-model="form.note" type="textarea" />
-      </el-form-item>
-    </el-form>
+          <el-form-item label="Note" prop="note">
+            <el-input v-model="form.note" type="textarea" />
+          </el-form-item> </el-form
+      ></el-col>
+      <el-col :span="1"
+        ><el-divider direction="vertical" class="h-full"
+      /></el-col>
+      <el-col :span="7">
+        <Schedule :artist-id="form.artistId" />
+      </el-col>
+    </el-row>
 
     <template #footer>
       <div class="flex px-2.5">
@@ -75,8 +111,9 @@ import {
   type FormInstance,
   type FormRules,
 } from "element-plus";
-import { type OrderForm, defaultOrderForm } from "@/types/api/order";
+import { type OrderForm, defaultOrderForm } from "@/types/apis/order";
 import { useOrderHook } from "@/views/user/Order/hook";
+import Schedule from "./Schedule.vue";
 
 const { onUpdateOrder, onCreateOrder } = useOrderHook();
 
@@ -167,11 +204,27 @@ const rules = reactive<FormRules>({
     {
       required: true,
       message: "Please select a value",
-      trigger: "change",
+      trigger: "blur",
     },
   ],
 });
+const onPriceInput = (value: string) => {
+  // Loại bỏ các ký tự không phải số
+  const numericValue = value.replace(/[^\d]/g, "");
+  form.value.price = numericValue ? parseInt(numericValue, 10) : null;
+};
+const formatCurrency = (value: string | number) => {
+  if (!value) return "";
+  return new Intl.NumberFormat("vi-VN").format(Number(value));
+};
 
+// Hàm chuẩn hóa và chuyển đổi giá trị đầu vào
+const parseCurrency = (value: string) => {
+  if (!value) return "";
+  // Chuẩn hóa dấu phân cách
+  const normalized = value.replace(/,/g, "").replace(/\./g, "");
+  return normalized.replace(/[^\d]/g, ""); // Loại bỏ ký tự không phải số
+};
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
 
@@ -244,4 +297,8 @@ const showModel = (valueType: string, data: any) => {
 defineExpose({ showModel });
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.el-divider--vertical {
+  height: 100%;
+}
+</style>

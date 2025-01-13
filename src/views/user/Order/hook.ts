@@ -1,10 +1,21 @@
 import { ref, watch } from "vue";
 import { useFilterOrderStore } from "@/store/modules/filterOrder";
-import { createOrder, deleteOrder, getOrders, updateOrder, updateStatus } from "@/api/order";
-import type { ShowTop } from "@/types/api/order";
+import {
+  createOrder,
+  deleteOrder,
+  getOrders,
+  updateOrder,
+  updateStatus,
+  getScheduledOrder,
+  getShowTop,
+} from "@/apis/order";
+import type { OrderForm, ShowTop } from "@/types/apis/order";
+import type { Order } from "@/types/modules/Order";
 
 export function useOrderHook() {
-  const orders = ref([]);
+  const orders = ref<Order[]>([]);
+  const scheduledOrders = ref<Order[]>([]);
+
   const showTopValue = ref<ShowTop[]>([]);
   const loading = ref(false);
   const pagination = ref({
@@ -25,25 +36,31 @@ export function useOrderHook() {
       },
     };
 
-    const result = await getOrders(params);
-    orders.value = result.data;
-    pagination.value.total = result.meta?.total ?? 0;
+    const { data, meta } = await getOrders(params);
+    const { total } = meta;
+    orders.value = data;
+    pagination.value.total = total;
     loading.value = false;
   }
 
-  function onGetShowTop() {
+  async function onGetScheduledOrders(artistId: string) {
     loading.value = true;
-    console.log("🚀 ~ onGetShowTop ~  loading.value:", loading.value);
+    const { data } = await getScheduledOrder(artistId);
+    scheduledOrders.value = data;
+    loading.value = false;
+  }
+
+  async function onGetShowTop() {
+    loading.value = true;
     const { getQuery } = useFilterOrderStore();
+    const params = {
+      params: {
+        ...getQuery,
+      },
+    };
 
-    // Giả sử bạn đang lấy dữ liệu trong showTopValue
-    showTopValue.value = [
-      { key: "2024-12-01", value: 200000 },
-      { key: "2024-12-02", value: 250000 },
-      { key: "2024-12-03", value: 240000 },
-      { key: "2024-12-04", value: 300000 },
-    ];
-
+    const { data } = await getShowTop(params);
+    showTopValue.value = data;
     loading.value = false;
   }
 
@@ -90,10 +107,12 @@ export function useOrderHook() {
     onChangePage,
     onChangeType,
     onGetShowTop,
+    onGetScheduledOrders,
     orders,
     type,
     pagination,
     loading,
     showTopValue,
+    scheduledOrders,
   };
 }

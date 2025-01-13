@@ -1,53 +1,55 @@
 <template>
   <el-card>
     <div class="user-info text-center">
-      <div class="actions space-x-6">
-        <el-button
-          v-if="!isMyProfile(data.id)"
-          :class="['shake-button', { 'trigger-shake': isShaking }]"
-          type="primary"
-          @click="onShow"
-        >
-          Book
-        </el-button>
-        <el-button>Xem review</el-button>
-      </div>
-      <el-rate
-        v-model="value"
-        disabled
-        show-score
-        text-color="#ff9900"
-        score-template="{value} points"
-        class="m-2"
-      />
-      <div class="flex gap-2 justify-center flex-wrap px-2 mb-3">
-        <el-tag
-          v-for="tag in form.genre"
-          :key="tag"
-          :closable="editable"
-          :disable-transitions="false"
-          @close="handleClose(tag)"
-        >
-          {{ tag }}
-        </el-tag>
-        <div v-if="editable" class="flex">
-          <el-input
-            v-if="inputVisible"
-            ref="InputRef"
-            v-model="inputValue"
-            class="w-20"
-            size="small"
-            @keyup.enter="handleInputConfirm"
-            @blur="handleInputConfirm"
-          />
+      <div v-if="data.role === 'ARTIST'">
+        <div class="actions space-x-6">
           <el-button
-            v-else
-            class="button-new-tag"
-            size="small"
-            @click="showInput"
+            v-if="!isMyProfile(data.id)"
+            :class="['shake-button', { 'trigger-shake': isShaking }]"
+            type="primary"
+            @click="onShow"
           >
-            + New Tag
+            Book
           </el-button>
+          <!-- <el-button>Xem review</el-button> -->
+        </div>
+        <el-rate
+          :model-value="data.rate"
+          disabled
+          show-score
+          text-color="#ff9900"
+          score-template="{value} points"
+          class="m-2"
+        />
+        <div class="flex gap-2 justify-center flex-wrap px-2 mb-3">
+          <el-tag
+            v-for="tag in form.genre"
+            :key="tag"
+            :closable="editable"
+            :disable-transitions="false"
+            @close="handleClose(tag)"
+          >
+            {{ tag }}
+          </el-tag>
+          <div v-if="editable" class="flex">
+            <el-input
+              v-if="inputVisible"
+              ref="InputRef"
+              v-model="inputValue"
+              class="w-20"
+              size="small"
+              @keyup.enter="handleInputConfirm"
+              @blur="handleInputConfirm"
+            />
+            <el-button
+              v-else
+              class="button-new-tag"
+              size="small"
+              @click="showInput"
+            >
+              + New Tag
+            </el-button>
+          </div>
         </div>
       </div>
       <el-input
@@ -184,7 +186,7 @@ import { Icon } from "@iconify/vue";
 import { Clock, OfficeBuilding } from "@element-plus/icons-vue";
 
 import { useProfile } from "../hookProfile";
-import type { Profile } from "@/types/module/User";
+import type { Profile } from "@/types/modules/User";
 
 import { ElMessage } from "element-plus";
 

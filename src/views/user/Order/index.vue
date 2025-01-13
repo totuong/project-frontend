@@ -6,32 +6,38 @@
         class="demo-tabs"
         @tab-change="handleChangeTab"
       >
-        <Filter class="mb-4" />
-        <el-tab-pane label="Danh sách gửi" name="user"
-          ><Table
-            :tableData="orders"
-            :loading="loading"
-            :type="type"
-            @on-update="onGetOrders"
-            :pagination="pagination"
-            @onChangePage="onChangePage"
-        /></el-tab-pane>
+        <Filter v-if="activeName !== 'calender'" class="mb-4" />
         <el-tab-pane
-          v-if="activeName === 'artist'"
+          v-if="userStore.role === 'ARTIST'"
+          label="Lịch trình"
+          name="calender"
+          ><BookingCalender :data="scheduledOrders" />
+        </el-tab-pane>
+        <el-tab-pane
+          v-if="userStore.role === 'ARTIST'"
           label="Danh sách nhận"
           name="artist"
           ><Table
             :tableData="orders"
+            :pagination="pagination"
             :loading="loading"
             :type="type"
-            :pagination="pagination"
             @onChangePage="onChangePage"
         /></el-tab-pane>
+        <el-tab-pane label="Danh sách gửi" name="user"
+          ><Table
+            :tableData="orders"
+            :pagination="pagination"
+            :type="type"
+            @on-update="onGetOrders"
+            @onChangePage="onChangePage"
+        /></el-tab-pane>
+
         <el-tab-pane
-          v-if="activeName === 'artist'"
+          v-if="userStore.role === 'ARTIST'"
           label="Doanh thu"
-          name="third"
-          ><Revenue v-if="show" />
+          name="revenue"
+          ><Revenue v-if="show" :data="showTopValue" :loading="loading" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -50,31 +56,39 @@ import { useOrderHook } from "./hook";
 import { useFilterOrderStore } from "@/store/modules/filterOrder";
 import useUserStore from "@/store/modules/user";
 import Revenue from "./components/Revenue.vue";
+import BookingCalender from "./components/BookingCalender.vue";
 const userStore = useUserStore();
 const {
   onGetOrders,
   onChangePage,
   onChangeType,
   onGetShowTop,
+  onGetScheduledOrders,
   orders,
+  scheduledOrders,
   loading,
   pagination,
   type,
+  showTopValue,
 } = useOrderHook();
 
-const activeName = userStore.role === "USER" ? "user" : "artist";
+const firstTag = userStore.role === "USER" ? "user" : "calender";
+const activeName = ref(firstTag);
 const show = ref(false);
 
 const handleChangeTab = (name: TabPaneName) => {
-  if (name !== "user" && name !== "artist") {
+  if (name === "revenue") {
     show.value = true;
     onGetShowTop();
     return;
   }
-  show.value = false;
-  onChangeType(name); // Sử dụng tab.name thay vì tabName
-
-  onGetOrders();
+  if (name === "calender") {
+    onGetScheduledOrders(userStore.profileId);
+  } else {
+    onChangeType(name);
+    show.value = false;
+    onGetOrders();
+  }
 };
 const filterOrderStore = useFilterOrderStore();
 
@@ -83,8 +97,9 @@ watch(filterOrderStore, () => {
 });
 
 onBeforeMount(() => {
-  onChangeType(activeName);
-  handleChangeTab(activeName);
+  onChangeType(activeName.value);
+  handleChangeTab(activeName.value);
+  onGetShowTop();
 });
 </script>
 

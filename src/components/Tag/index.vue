@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Profile } from "@/types/module/User";
+import type { Profile } from "@/types/modules/User";
 import { convertLocalPathToUrl } from "@/utils/image";
 import { Icon } from "@iconify/vue";
 

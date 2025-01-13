@@ -38,12 +38,12 @@
         fit="contain"
       />
     </div>
-    <div v-else class="text-danger mt-4">Không có mã QR để hiển thị</div>
+    <div v-else class="text-orange-600 mt-4">Không có mã QR để hiển thị</div>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import type { Order } from "@/types/module/Order";
+import type { Order } from "@/types/modules/Order";
 import { moneyFormat } from "@/utils/filter";
 import { convertLocalPathToUrl } from "@/utils/image";
 import { ref } from "vue";
@@ -68,7 +68,5 @@ defineExpose({ showModel });
   height: 200px;
   margin: auto;
 }
-.text-danger {
-  color: red;
-}
+
 </style>

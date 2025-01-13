@@ -71,7 +71,7 @@ const updateChart = () => {
       },
     },
     legend: {
-      data: ["Revenue", "Publisher"],
+      data: ["Revenue"],
       bottom: "auto",
     },
     grid: {
@@ -104,16 +104,7 @@ const updateChart = () => {
           show: false,
         },
       },
-      {
-        type: "value",
-        name: "Publisher",
-        splitArea: {
-          show: false,
-        },
-        splitLine: {
-          show: false,
-        },
-      },
+     
     ],
     color: ["#546ec6", "#fac859"],
     series: [
@@ -141,13 +132,7 @@ const updateChart = () => {
           },
         },
       },
-      {
-        name: "Publisher",
-        type: "line",
-        yAxisIndex: 1,
-        data: props.lines,
-        animationDuration: 100,
-      },
+    
     ],
   });
 };

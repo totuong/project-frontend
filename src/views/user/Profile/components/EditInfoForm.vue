@@ -63,7 +63,7 @@
       <el-form-item label="Profile code" prop="prop.address">
         <el-input v-model="form.profileCode" />
       </el-form-item>
-      <el-form-item label="Vai trò" prop="form.role">
+      <!-- <el-form-item label="Vai trò" prop="form.role">
         <el-select
           v-model="form.role"
           placeholder="Select"
@@ -77,7 +77,7 @@
             :value="item.value"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
 
     <template #footer>
@@ -101,7 +101,7 @@ import {
   type FormInstance,
   type FormRules,
 } from "element-plus";
-import { defaultProfile, type Profile } from "@/types/module/User";
+import { defaultProfile, type Profile } from "@/types/modules/User";
 import { useProfile } from "../hookProfile";
 
 const { onSaveProfile } = useProfile();

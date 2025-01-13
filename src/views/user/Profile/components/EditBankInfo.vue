@@ -74,7 +74,7 @@ import {
   type FormInstance,
   type FormRules,
 } from "element-plus";
-import { defaultBank, type Bank } from "@/types/module/User";
+import { defaultBank, type Bank } from "@/types/modules/User";
 import { useProfile } from "../hookProfile";
 import { env } from "@/utils/env";
 import { formatToken, getToken } from "@/utils/auth";

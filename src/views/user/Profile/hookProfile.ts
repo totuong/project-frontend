@@ -7,9 +7,9 @@ import {
   unfriend,
   checkFriend,
   saveBankInfo,
-} from "@/api/user";
-import { defaultProfile, type Bank, type Profile } from "@/types/module/User";
-import type { Result } from "@/types/api/base";
+} from "@/apis/user";
+import { defaultProfile, type Bank, type Profile } from "@/types/modules/User";
+import type { Result } from "@/types/apis/base";
 import { ref } from "vue";
 import useUserStore from "@/store/modules/user";
 const userStore = useUserStore();

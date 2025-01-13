@@ -11,6 +11,7 @@
       :data="tableData"
       :border="parentBorder"
       :row-key="rowKey"
+      v-loading="loading"
       :expand-row-keys="expandRowKeys"
       style="width: 100%"
     >
@@ -109,6 +110,7 @@
           </div>
         </template>
       </el-table-column>
+      <el-table-column type="index" width="50" />
 
       <el-table-column label="Booker Name">
         <template #default="scope">
@@ -174,56 +176,60 @@
         align="center"
       >
         <template #default="scope">
-          <el-button
-            v-if="type === 'user' && scope.row.status === 'pending'"
-            plain
-            @click="onEdit(scope.row)"
-            >Edit</el-button
-          >
-          <el-button
-            v-if="
-              type === 'user' &&
-              scope.row.status !== 'cancel' &&
-              scope.row.status !== 'deleted'
-            "
-            plain
-            @click="showBank(scope.row)"
-            >Thanh toán</el-button
-          >
-          <el-button
-            v-if="type === 'artist'"
-            :disabled="scope.row.status !== 'pending'"
-            type="success"
-            plain
-            @click="updateStatus(scope.row.id, 'confirmed')"
-            >{{
-              scope.row.status === "pending"
-                ? "Xác nhận"
-                : scope.row.status === "confirmed"
-                ? "Đã xác nhận"
-                : "Đã xóa"
-            }}
-          </el-button>
-          <el-button
-            v-if="type === 'user'"
-            :disabled="
-              scope.row.status === 'deleted' ||
-              scope.row.status === 'confirmed' ||
-              scope.row.status === 'success'
-            "
-            type="info"
-            plain
-            @click="updateStatus(scope.row.id, 'deleted')"
-            >Hủy</el-button
-          >
-          <el-button
-            v-if="type === 'artist'"
-            :disabled="scope.row.status !== 'pending'"
-            type="info"
-            plain
-            @click="cancelOrder(scope.row.id)"
-            >Từ chối</el-button
-          >
+          <div class="flex justify-end">
+            <el-button
+              v-if="checkButton(scope.row, 'review')"
+              plain
+              @click="onReview(scope.row)"
+              >Đánh giá</el-button
+            >
+            <el-button
+              v-if="checkButton(scope.row, 'edit')"
+              plain
+              @click="onEdit(scope.row)"
+              >Edit</el-button
+            >
+            <el-button
+              v-if="checkButton(scope.row, 'payment')"
+              plain
+              @click="showBank(scope.row)"
+              >Thanh toán</el-button
+            >
+            <el-button
+              v-if="type === 'artist'"
+              :disabled="scope.row.status !== 'pending'"
+              type="success"
+              plain
+              @click="updateStatus(scope.row.id, 'confirmed')"
+              >{{
+                scope.row.status === "pending"
+                  ? "Xác nhận"
+                  : scope.row.status === "confirmed"
+                  ? "Đã xác nhận"
+                  : "Đã xóa"
+              }}
+            </el-button>
+            <el-button
+              v-if="type === 'user'"
+              :disabled="
+                scope.row.status === 'deleted' ||
+                scope.row.status === 'confirmed' ||
+                scope.row.status === 'success'
+              "
+              type="info"
+              plain
+              @click="updateStatus(scope.row.id, 'deleted')"
+              >Hủy</el-button
+            >
+            <el-button
+              v-if="checkButton(scope.row, 'reject')"
+              :disabled="scope.row.status !== 'pending'"
+              type="info"
+              plain
+              @click="cancelOrder(scope.row.id)"
+              >Từ chối</el-button
+            >
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -231,11 +237,12 @@
       class="mt-4"
       background
       layout="total, prev, pager, next"
-      :total="total"
-      :page-size="size"
+      :total="pagination.total"
+      :page-size="10"
       @current-change="onChangePage"
     />
     <BookForm ref="bookFormRef" @on-update="onLoad" />
+    <ReviewForm ref="reviewFormRef" @on-update="onLoad" />
     <BankInfo ref="bankInfoRef" />
     <CancelForm ref="cancelFormRef" @on-update="onLoad" />
   </el-card>
@@ -248,13 +255,15 @@ import dayjs from "dayjs";
 import { useOrderHook } from "../hook";
 import { ElMessage } from "element-plus";
 import BookForm from "@/components/BookForm/index.vue";
-import type { OrderForm } from "@/types/api/order";
-import type { Order } from "@/types/module/Order";
+import ReviewForm from "@/components/ReviewForm/index.vue";
+import type { OrderForm } from "@/types/apis/order";
+import type { Order } from "@/types/modules/Order";
 import { convertLocalPathToUrl } from "@/utils/image";
 import BankInfo from "./BankInfo.vue";
 import CancelForm from "./CancelForm.vue";
 
 const bookFormRef = ref<InstanceType<typeof BookForm>>();
+const reviewFormRef = ref<InstanceType<typeof ReviewForm>>();
 const bankInfoRef = ref<InstanceType<typeof BankInfo>>();
 const cancelFormRef = ref<InstanceType<typeof CancelForm>>();
 
@@ -274,17 +283,14 @@ const props = defineProps({
     type: Array as PropType<Order[]>,
     default: () => [],
   },
-  total: {
-    type: Number,
-    default: 0,
-  },
+
   type: {
     type: String,
     default: "user",
   },
-  size: {
-    type: Number,
-    default: 20,
+  pagination: {
+    type: Object,
+    default: {},
   },
   loading: {
     type: Boolean,
@@ -299,6 +305,10 @@ const onChangePage = (val: Number) => {
 
 const onEdit = (data: OrderForm) => {
   bookFormRef.value?.showModel("edit", data);
+};
+
+const onReview = (data: OrderForm) => {
+  reviewFormRef.value?.showModel(data.id, data.artistId);
 };
 
 const updateStatus = async (id: string, status: string, reason?: string) => {
@@ -346,6 +356,27 @@ const getTagType = (status: string): string => {
       return "info";
     default:
       return "";
+  }
+};
+const checkButton = (order: Order, buttonType: string) => {
+  const status = order.status;
+  switch (buttonType) {
+    case "edit":
+      return props.type === "user" && status === "pending";
+    case "payment":
+      return (
+        props.type === "user" && status !== "cancel" && status !== "deleted"
+      );
+    case "review":
+      return props.type === "user" && status === "success";
+    case "cancel":
+      return props.type === "user";
+    case "confirm":
+      return props.type === "artist" && status === "pending";
+    case "reject":
+      return props.type === "artist" && status === "pending";
+    default:
+      return false; // Mặc định trả về `false` nếu không khớp loại nào
   }
 };
 

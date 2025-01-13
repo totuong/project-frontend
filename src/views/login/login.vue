@@ -43,7 +43,7 @@
           Quên mật khẩu?
         </el-button>
       </div>
-      <el-button class="login-btn" round type="primary" @click="onLogin"
+      <el-button round type="primary" @click="onLogin"
         >ĐĂNG NHẬP</el-button
       >
     </el-form>
@@ -96,7 +96,7 @@ const onLogin = async () => {
               message: "Login success",
             });
               
-            router.push("/user");
+            router.push("/");
             loading.stopLoading();
           } else {
             ElMessage.error({ message: res.data });

@@ -9,6 +9,7 @@
       <el-form
         ref="ruleFormRef"
         :model="ruleForm"
+        :rules="changePasswordFormRules"
         label-width="auto"
         class="demo-ruleForm"
         :size="formSize"
@@ -22,7 +23,7 @@
           <el-input
             clearable
             show-password
-            v-model="ruleForm.confirmPassword"
+            v-model="ruleForm.currentPassword"
             placeholder="Mật khẩu"
             :prefix-icon="Lock"
           ></el-input>
@@ -35,7 +36,7 @@
           <el-input
             clearable
             show-password
-            v-model="ruleForm.confirmPassword"
+            v-model="ruleForm.newPassword"
             placeholder="Mật khẩu"
             :prefix-icon="Lock"
           ></el-input>
@@ -69,27 +70,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineExpose, reactive } from "vue";
+import { ref, reactive } from "vue";
 import type { ComponentSize, FormInstance, FormRules } from "element-plus";
 import { Lock } from "@element-plus/icons-vue";
+import type { ChangePasswordForm } from "@/types/apis/auth";
+import { reqChangePassword } from "@/apis/auth";
+import { useValidators } from "@/composables/use-validator.composable";
 
 const showForm = ref(false);
-
-const showModel = () => {
-  showForm.value = true;
-  console.log("🚀 ~ showModel ~ showForm.value :", showForm.value);
-};
-defineExpose({ showModel });
-
-interface RuleForm {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
+const validator = useValidators();
 
 const formSize = ref<ComponentSize>("default");
 const ruleFormRef = ref<FormInstance>();
-const ruleForm = reactive<RuleForm>({
+  const changePasswordFormRules: FormRules = {
+  currentPassword: [validator.required, validator.password],
+  newPassword: [validator.required, validator.password],
+  confirmPassword: [validator.required, validator.confirmPassword],
+};
+const ruleForm = reactive<ChangePasswordForm>({
   currentPassword: "",
   newPassword: "",
   confirmPassword: "",
@@ -99,7 +97,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      console.log("submit!");
+      reqChangePassword(ruleForm)
+
     } else {
       console.log("error submit!", fields);
     }

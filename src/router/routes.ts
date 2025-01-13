@@ -42,19 +42,19 @@ export const constantRoute = [
   //   ],
   // },
   {
-    path: "/",
+    path: "/user",
     component: () => import("@/layout/index.vue"),
-    name: "user",
+    name: "",
     meta: {
       title: "User",
       hidden: false,
       auth: false,
       icon: "",
     },
-    redirect: "/user/index",
+    redirect: "/",
     children: [
       {
-        path: "/user/index",
+        path: "/",
         component: () => import("@/views/user/index.vue"),
         meta: {
           title: "Trang chủ",
