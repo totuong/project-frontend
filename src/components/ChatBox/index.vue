@@ -122,7 +122,11 @@ import { ref, computed, reactive, nextTick, onMounted, onBeforeMount, watch } fr
 import { ElButton, ElInput, ElIcon } from "element-plus";
 import { Icon } from "@iconify/vue";
 import { Phone, Close, Plus } from "@element-plus/icons-vue"; // Import các icon cần thiết
+import { connect } from '@/apis/websocket-service';
 
+connect('http://localhost:8080/ws', (message) => {
+  console.log('Received message:', message);
+});
 const chatMessages = ref<HTMLElement | null>(null);
 const isChatVisible = ref(false);
 

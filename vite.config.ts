@@ -6,7 +6,8 @@ import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import path from "path";
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
-
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 // https://vitejs.dev/config/
 export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const env = loadEnv(mode, process.cwd());
@@ -27,6 +28,9 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
         localEnabled: command === "serve",
       }),
       vue(),
+      nodePolyfills({
+        protocol: 'browser',
+      }),
     ],
     resolve: { alias: {   "@": path.resolve(__dirname, "src") } },
     css: {
@@ -46,6 +50,9 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
+    },
+    define: {
+      global: 'globalThis', // Polyfill global trong trình duyệt
     },
   };
 };
