@@ -108,7 +108,6 @@ import {
     reactive,
     computed,
     onMounted,
-    onBeforeMount,
-    defineComponent
+    onBeforeMount
 } from "vue";
 </script>

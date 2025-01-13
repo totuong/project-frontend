@@ -20,8 +20,14 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 yarn
 ```
 
-### Compile and Hot-Reload for Development
 
+## Project Setup Install package
+
+```sh
+yarn install
+
+### Compile and Hot-Reload for Development
+    
 ```sh
 yarn dev
 ```

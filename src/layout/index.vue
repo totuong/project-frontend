@@ -1,264 +1,172 @@
 <script setup lang="ts">
-import "animate.css";
-// 引入 src/components/ReIcon/src/offlineIcon.ts 文件中所有使用addIcon添加过的本地图标
-import "@/components/ReIcon/src/offlineIcon";
-import { setType } from "./types";
-import { useLayout } from "./hooks/useLayout";
-import { useResizeObserver } from "@vueuse/core";
-import { useAppStoreHook } from "@/store/modules/app";
-import { useSettingStoreHook } from "@/store/modules/settings";
-import { deviceDetection, useDark, useGlobal } from "@pureadmin/utils";
-import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
-import { useUserStoreHook } from '@/store/modules/user'
-import {
-  h,
-  ref,
-  reactive,
-  computed,
-  onMounted,
-  onBeforeMount,
-  defineComponent
-} from "vue";
+import Main from "./main/index.vue";
+import Noti from "./Notification/index.vue";
+import Messenger from "./Messenger/index.vue";
+import Order from "./Order/index.vue";
+import useLayOutSettingStore from "@/store/modules/setting";
+import useUserStore from "@/store/modules/user";
+import { useRouter } from "vue-router";
+import { User, Search, Lock, Setting } from "@element-plus/icons-vue";
+import { Icon } from "@iconify/vue";
+import { computed, onMounted, ref } from "vue";
+import { convertLocalPathToUrl } from "@/utils/image";
 
-import navbar from "./components/navbar.vue";
-import tag from "./components/tag/index.vue";
-import appMain from "./components/appMain.vue";
-import setting from "./components/setting/index.vue";
-import Vertical from "./components/sidebar/vertical.vue";
-import Horizontal from "./components/sidebar/horizontal.vue";
-import backTop from "@/assets/svg/back_top.svg?component";
-import Notice from './components/popup/Notice.vue'
-
-const appWrapperRef = ref();
-const { isDark } = useDark();
-const { layout } = useLayout();
-const isMobile = deviceDetection();
-const pureSetting = useSettingStoreHook();
-const { $storage } = useGlobal<GlobalPropertiesApi>();
-
-const set: setType = reactive({
-  sidebar: computed(() => {
-    return useAppStoreHook().sidebar;
-  }),
-
-  device: computed(() => {
-    return useAppStoreHook().device;
-  }),
-
-  fixedHeader: computed(() => {
-    return pureSetting.fixedHeader;
-  }),
-
-  classes: computed(() => {
-    return {
-      hideSidebar: !set.sidebar.opened,
-      openSidebar: set.sidebar.opened,
-      withoutAnimation: set.sidebar.withoutAnimation,
-      mobile: set.device === "mobile"
-    };
-  }),
-
-  hideTabs: computed(() => {
-    return $storage?.configure.hideTabs;
-  })
-});
-
-function setTheme(layoutModel: string) {
-  window.document.body.setAttribute("layout", layoutModel);
-  $storage.layout = {
-    layout: `${layoutModel}`,
-    theme: $storage.layout?.theme,
-    darkMode: $storage.layout?.darkMode,
-    sidebarStatus: $storage.layout?.sidebarStatus,
-    epThemeColor: $storage.layout?.epThemeColor
-  };
+const userStore = useUserStore();
+const router = useRouter();
+const handleSelect = (item: Record<string, any>) => {
+  console.log(item);
+};
+interface LinkItem {
+  value: string;
+  link: string;
 }
+let timeout: ReturnType<typeof setTimeout>;
 
-function toggle(device: string, bool: boolean) {
-  useAppStoreHook().toggleDevice(device);
-  useAppStoreHook().toggleSideBar(bool, "resize");
-}
+const querySearchAsync = (queryString: string, cb: (arg: any) => void) => {
+  const results = queryString
+    ? links.value.filter(createFilter(queryString))
+    : links.value;
 
-function setGutter(number: number) {
-  useAppStoreHook().setGutter(number)
-}
-
-// 判断是否可自动关闭菜单栏
-let isAutoCloseSidebar = true;
-
-useResizeObserver(appWrapperRef, entries => {
-  if (isMobile) return;
-  const entry = entries[0];
-  const { width } = entry.contentRect;
-  resizeGutter(width)
-  width <= 760 ? setTheme("vertical") : setTheme(useAppStoreHook().layout);
-  /** width app-wrapper类容器宽度
-   * 0 < width <= 760 隐藏侧边栏
-   * 760 < width <= 990 折叠侧边栏
-   * width > 990 展开侧边栏
-   */
-  if (width > 0 && width <= 760) {
-    toggle("mobile", false);
-    isAutoCloseSidebar = true;
-  } else if (width > 760 && width <= 990) {
-    if (isAutoCloseSidebar) {
-      toggle("desktop", false);
-      isAutoCloseSidebar = false;
-    }
-  } else if (width > 990 && !set.sidebar.isClickCollapse) {
-    toggle("desktop", true);
-    isAutoCloseSidebar = true;
-  } else {
-    toggle("desktop", false);
-    isAutoCloseSidebar = false;
-  }
-});
-
-const resizeGutter = (width: number) => {
-  if(width < 1280){
-    setGutter(20)
-  }else if(width >=1280 && width <=1336){
-    setGutter(30)
-  }else if(width > 1336){
-    setGutter(46)
-  }
-}
-
-onMounted(() => {
-  if (isMobile) {
-    toggle("mobile", false);
-  }
-  loadSubiz()
-});
-
-onBeforeMount(() => {
-  useDataThemeChange().dataThemeChange();
-});
-
-const layoutHeader = defineComponent({
-  render() {
-    return h(
-      "div",
-      {
-        class: { "fixed-header": set.fixedHeader },
-        style: [
-          set.hideTabs && layout.value.includes("horizontal")
-            ? isDark.value
-              ? "box-shadow: 0 1px 4px #0d0d0d"
-              : "box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08)"
-            : ""
-        ]
-      },
-      {
-        default: () => [
-          !pureSetting.hiddenSideBar &&
-          (layout.value.includes("vertical") || layout.value.includes("mix"))
-            ? h(navbar)
-            : null,
-          !pureSetting.hiddenSideBar && layout.value.includes("horizontal")
-            ? h(Horizontal)
-            : null,
-          null
-        ]
-      }
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    cb(results);
+  }, 3000 * Math.random());
+};
+const createFilter = (queryString: string) => {
+  return (restaurant: LinkItem) => {
+    return (
+      restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
     );
-  }
+  };
+};
+
+const avatarUrl = computed(() => convertLocalPathToUrl(userStore?.avatar));
+const handleChangePasswordClick = () => {
+  router.push("/user/change-password"); // Điều hướng tới /user/profile
+};
+
+const logout = () => {
+  userStore.userLogout();
+};
+const links = ref<LinkItem[]>([]);
+const loadAll = () => {
+  return [
+    { value: "vue", link: "https://github.com/vuejs/vue" },
+    { value: "element", link: "https://github.com/ElemeFE/element" },
+    { value: "cooking", link: "https://github.com/ElemeFE/cooking" },
+    { value: "mint-ui", link: "https://github.com/ElemeFE/mint-ui" },
+    { value: "vuex", link: "https://github.com/vuejs/vuex" },
+    { value: "vue-router", link: "https://github.com/vuejs/vue-router" },
+    { value: "babel", link: "https://github.com/babel/babel" },
+  ];
+};
+onMounted(() => {
+  links.value = loadAll();
 });
-
-const loadSubiz = () => {
-  const { username, phone, email } = useUserStoreHook()
-  subiz('updateUserAttributes', [
-    { key: 'fullname', text: username },
-    { key: 'phones', text: phone },
-    { key: 'emails', text: email }
-  ]);
-  subiz('overrideChatbox', {
-    type: 'chatbox',
-    chatbox: {
-      prechat_form: {
-        enabled: false,
-      },
-    },
-  });
-}
+const state = ref("");
+let LayOutSettingStore = useLayOutSettingStore();
 </script>
-
 <template>
-  <div ref="appWrapperRef" :class="['app-wrapper', set.classes]">
-    <Notice>
-    </Notice>
-    <div
-      v-show="
-        set.device === 'mobile' &&
-        set.sidebar.opened &&
-        layout.includes('vertical')
-      "
-      class="app-mask"
-      @click="useAppStoreHook().toggleSideBar()"
-    />
-    <Vertical
-      v-show="
-        !pureSetting.hiddenSideBar &&
-        (layout.includes('vertical') || layout.includes('mix'))
-      "
-    />
-    <div
-      :class="[
-        'main-container',
-        pureSetting.hiddenSideBar ? 'main-hidden' : ''
-      ]"
-    >
-      <div v-if="set.fixedHeader">
-        <layout-header />
-        <!-- 主体内容 -->
-        <app-main :fixed-header="set.fixedHeader" />
+  <el-container class="layout-container-demo" style="height: 100vh">
+    <el-header class="flex flex-row items-center top-0 z-10 fixed w-full">
+      <div class="first">
+        <el-tooltip content="Trang chủ">
+        <router-link :to="'/'"
+          ><Icon
+            icon="twemoji:man-singer-light-skin-tone"
+            width="2.5em"
+            height="2.5em"
+        /></router-link>
+      </el-tooltip>
       </div>
-      <el-scrollbar v-else>
-        <el-backtop
-          title="回到顶部"
-          target=".main-container .el-scrollbar__wrap"
+
+      <div class="w-64 ml-20">
+        <el-autocomplete
+          class="search-custom"
+          v-model="state"
+          size="large"
+          :fetch-suggestions="querySearchAsync"
+          placeholder="Search..."
+          clearable
+          @select="handleSelect"
         >
-          <backTop />
-        </el-backtop>
-        <layout-header />
-        <!-- 主体内容 -->
-        <app-main :fixed-header="set.fixedHeader" />
-      </el-scrollbar>
-    </div>
-    <!-- 系统设置 -->
-    <setting />
-  </div>
+          <template #prefix>
+            <el-icon>
+              <Search />
+            </el-icon>
+          </template>
+        </el-autocomplete>
+      </div>
+      <div class="last ml-auto flex items-center">
+        <div class="flex flex-row mr-8 space-x-6">
+          <Order />
+          <Messenger />
+          <Noti />
+        </div>
+        <el-dropdown class="flex" trigger="click">
+          <span class="flex flex-row items-center">
+            <img
+              :src="avatarUrl ?? '/logo.png'"
+              alt="Avatar"
+              class="mr-3 w-8 h-8 rounded-full object-cover"
+              width="32"
+              height="32"
+            />
+            <!-- Thay thế bằng icon nếu avatar không tồn tại -->
+
+            <p class="text-white text-xl font-bold">{{ userStore.fullName }}</p>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu class="logout">
+              <router-link :to="`/user/profile/${userStore.profileCode}`">
+                <el-dropdown-item>
+                  <el-icon> <user /> </el-icon>Profile
+                </el-dropdown-item>
+              </router-link>
+
+              <el-dropdown-item @click="handleChangePasswordClick"
+                ><el-icon><Lock /></el-icon>Change Password</el-dropdown-item
+              >
+              <el-dropdown-item
+                ><el-icon><Setting /></el-icon>Setting</el-dropdown-item
+              >
+              <el-dropdown-item divided @click="logout">
+                <Icon
+                  icon="material-symbols:logout"
+                  width="20"
+                  height="20"
+                />Logout</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+    </el-header>
+    <el-aside
+      v-if="false"
+      width="200px"
+      :class="{ isCollapse: LayOutSettingStore.isCollapse ? true : false }"
+    >
+    </el-aside>
+    <el-container class="w-full mt-[60px]">
+      <el-main>
+        <Main />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
-
 <style lang="scss" scoped>
-.app-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  &::after {
-    display: table;
-    clear: both;
-    content: "";
-  }
-
-  &.mobile.openSidebar {
-    position: fixed;
-    top: 0;
-  }
+.el-aside {
+  // background-color: #001529 !important;
+  transition: all 0.3s;
 }
-
-.app-mask {
-  position: absolute;
-  top: 0;
+.el-header {
+  background-color: #6ba3be !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
   z-index: 999;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  opacity: 0.3;
+}
+.el-main {
+  padding: 0;
 }
 
-.re-screen {
-  margin-top: 12px;
-}
 </style>
