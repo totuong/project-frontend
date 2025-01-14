@@ -3,17 +3,23 @@
     <div class="post-comments rounded" v-if="comments.length > 0">
       <div v-for="comment in comments" :key="comment.id" class="mb-2 mr-4">
         <div class="flex flex-row mb-1">
-          <div class="mt-1">
-            <el-avatar
-              :src="
-                convertLocalPathToUrl(comment.profile.avatar) ??
-                (data.profile.role === 'ARTIST'
-                  ? '/default-artist-avatar.jpg'
-                  : '/logo.png')
-              "
-              size="small"
-            />
-          </div>
+          <el-popover placement="right" :width="360">
+            <template #reference>
+              <div class="mt-1">
+                <el-avatar
+                  :src="
+                    convertLocalPathToUrl(comment.profile.avatar) ??
+                    (data.profile.role === 'ARTIST'
+                      ? '/default-artist-avatar.jpg'
+                      : '/logo.png')
+                  "
+                  size="small"
+                />
+              </div>
+            </template>
+            <Tag :data="data.profile" @show-form="onShow" />
+          </el-popover>
+
           <div class="ml-2">
             <div class="flex items-center">
               <div class="bg-gray-100 p-2 rounded-md mr-1">
@@ -140,6 +146,7 @@
         </div>
       </div>
     </div>
+    <BookForm ref="bookFormRef" />
   </div>
 </template>
 
@@ -153,9 +160,16 @@ import { onBeforeMount, ref } from "vue";
 import { usePostHook } from "@/views/user/Home/hookPost";
 import { type CommentForm, defaultCommentForm } from "@/types/apis/post";
 import { ElMessage } from "element-plus";
-import { Close } from "@element-plus/icons-vue";
 import { formatTimeAgo } from "@/utils/time";
+import Tag from "@/components/Tag/index.vue";
+import BookForm from "@/components/BookForm/index.vue";
 
+const bookFormRef = ref<InstanceType<typeof BookForm>>();
+
+// Hàm mở dialog
+const onShow = (id: string) => {
+  bookFormRef.value?.showModel("save", id);
+};
 const {
   onDeleteComment,
   onCreateCommnent,

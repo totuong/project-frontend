@@ -16,3 +16,11 @@ export type Profile = {
   postsCount: number;
   isFollowing: boolean;
 };
+
+export type SearchForm = {
+  key: string;
+  type: string;
+  category: string;
+  rate: number;
+  people: string;
+};

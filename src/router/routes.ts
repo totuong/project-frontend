@@ -84,6 +84,16 @@ export const constantRoute = [
         },
       },
       {
+        path: "/user/search",
+        component: () => import("@/views/user/Search/index.vue"),
+        meta: {
+          title: "Search",
+          hidden: false,
+          auth: false,
+          icon: "HomeFilled",
+        },
+      },
+      {
         path: "/user/order",
         component: () => import("@/views/user/Order/index.vue"),
         meta: {

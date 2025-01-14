@@ -47,6 +47,15 @@ export type Bank = {
   name: string;
   qr: string;
 };
+
+export type SearchHistory = {
+  id: string;
+  key: string;
+  type: string;
+  category: string;
+  rate: number;
+}
+
 export const defaultBank: Bank = {
   id: "",
   bankNumber: "",
