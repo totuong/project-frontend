@@ -1,8 +1,10 @@
-import request, { camelCaseToUnderScore } from "@/utils/request";
+import request from "@/utils/request";
 import type { Result } from "@/types/apis/base";
 import type { Bank, Profile } from "@/types/modules/User";
+import type { ChangePasswordForm } from "@/types/apis/user";
 
 enum API {
+  CHANGE_PASSWORD_URL = "/user/change-password",
 
   PROFILE_URL = "/user/profile",
   PROFILE_UPDATE_URL = "/user/profile/update",
@@ -17,6 +19,9 @@ enum API {
   FRIEND_URL_BLOCKED = "/friend/blocked",
   FRIEND_URL_CHECK = "/friend/check",
 }
+
+export const changePassword = (data: ChangePasswordForm) =>
+  request.post<any, Result>(API.CHANGE_PASSWORD_URL, data);
 
 export const getProfile = (code: string) => {
   return request.get<any, Result>(API.PROFILE_URL + `/${code}`);

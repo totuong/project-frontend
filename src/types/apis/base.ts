@@ -2,6 +2,7 @@ export type Result = {
   success: boolean;
   data?: any;
   meta?: Meta;
+  statusCode: number;
 };
 
 type Meta = {

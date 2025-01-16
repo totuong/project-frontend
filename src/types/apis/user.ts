@@ -24,3 +24,9 @@ export type SearchForm = {
   rate: number;
   people: string;
 };
+
+export type ChangePasswordForm = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};

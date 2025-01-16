@@ -73,8 +73,8 @@
 import { ref, reactive } from "vue";
 import type { ComponentSize, FormInstance, FormRules } from "element-plus";
 import { Lock } from "@element-plus/icons-vue";
-import type { ChangePasswordForm } from "@/types/apis/auth";
-import { reqChangePassword } from "@/apis/auth";
+import type { ChangePasswordForm } from "@/types/apis/user";
+import { changePassword } from "@/apis/user";
 import { useValidators } from "@/composables/use-validator.composable";
 
 const showForm = ref(false);
@@ -97,7 +97,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      reqChangePassword(ruleForm)
+      changePassword(ruleForm)
 
     } else {
       console.log("error submit!", fields);

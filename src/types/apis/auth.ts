@@ -51,12 +51,6 @@ export type RefreshTokenResult = {
   };
 };
 
-export type ChangePasswordForm = {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};
-
 export type GoogleRedirectResult = {
   data: string;
 };

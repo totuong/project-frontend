@@ -46,7 +46,7 @@
           <el-form-item>
             <CustomSelect
               v-model="form.people"
-              :filter-data="filterData.people"
+              :filter-data="filterData.relationship"
               label="Mọi người:"
               clearable
               style="width: 200px"
@@ -122,7 +122,13 @@ const filterData = {
     "Thiếu nhi",
     "Khác",
   ],
-  people: ["Bạn bè", "Bạn của bạn bè", "Không phải bạn bè"],
+  relationship: [
+    { key: "isFriend", value: "Bạn bè" },
+    { key: "isFriendOfFriend", value: "Bạn của bạn bè" },
+    { key: "notIsFriend", value: "Không phải bạn bè" },
+    { key: "requested", value: "Đã yêu cầu kết bạn" },
+    { key: "isPending", value: "Chờ phê duyệt" },
+  ],
 };
 // Mảng người dùng
 interface User {
