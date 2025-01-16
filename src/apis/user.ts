@@ -20,8 +20,9 @@ enum API {
   FRIEND_URL_CHECK = "/friend/check",
 }
 
-export const changePassword = (data: ChangePasswordForm) =>
-  request.post<any, Result>(API.CHANGE_PASSWORD_URL, data);
+export const changePassword = (data: ChangePasswordForm) => {
+  return request.post<any, Result>(API.CHANGE_PASSWORD_URL, data);
+};
 
 export const getProfile = (code: string) => {
   return request.get<any, Result>(API.PROFILE_URL + `/${code}`);

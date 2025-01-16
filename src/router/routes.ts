@@ -17,30 +17,15 @@ export const constantRoute = [
       auth: false,
     },
   },
-  // {
-  //   path: "/",
-  //   component: () => import("@/layout/index.vue"),
-  //   name: "Home",
-  //   meta: {
-  //     title: "",
-  //     hidden: false,
-  //     auth: false,
-  //     icon: "",
-  //   },
-  //   redirect: "/home",
-  //   children: [
-  //     {
-  //       path: "/home",
-  //       component: () => import("@/views/home/index.vue"),
-  //       meta: {
-  //         title: "Home",
-  //         hidden: false,
-  //         auth: false,
-  //         icon: "HomeFilled",
-  //       },
-  //     },
-  //   ],
-  // },
+  {
+    path: "/:pathMatch(.*)*",  // Bắt tất cả các đường dẫn không hợp lệ
+    redirect: "/404",
+    name: "Any",
+    meta: {
+      title: "Not Found",
+      hidden: true,
+    },
+  },
   {
     path: "/user",
     component: () => import("@/layout/index.vue"),
@@ -211,7 +196,7 @@ export const anyRoute = {
   redirect: "/404",
   name: "Any",
   meta: {
-    title: "任意路由",
+    title: "Not foundfound",
     hidden: true,
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex flex-col">
+  <div class="h-screen flex flex-col ">
     <div class="bg-[#c9d6ff] flex flex-col items-center justify-center w-full h-full ">
       <h1 class="welcome text-2xl font-bold my-10 text-red-500">
         CHÀO MỪNG ĐẾN VỚI NỀN TẢNG KẾT NỐI NGHỆ SĨ CỦA CHÚNG TÔI
@@ -171,4 +171,5 @@ const onRegisterSuccess = () => {
 
 <style lang="scss" scoped>
 @import url("../../style/login.scss");
+
 </style>

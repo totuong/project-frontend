@@ -51,6 +51,6 @@ router.beforeEach(async (to, from, next) => {
 });
 // 全局后置守卫
 
-router.afterEach((route) => {
+router.afterEach(() => {
   nprogress.done();
 });

@@ -5,7 +5,7 @@ import { env } from "./env";
 
 const request = axios.create({
   baseURL: env.VITE_APP_BASE_API + "/v1",
-  timeout: 300000, // request timeout
+  timeout: 30000, // request timeout
 });
 
 export const formatToken = (token: string): string => {
@@ -36,6 +36,7 @@ request.interceptors.response.use(
   (error) => {
     let message = "";
     const status = error.response.status;
+
     switch (status) {
       // 401: 未登录
       // 未登录则跳转登录页面，并携带当前页面的路径

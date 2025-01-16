@@ -1,5 +1,7 @@
 <template>
-  <div class="common-layout h-full bg-[#f2f2ee] flex justify-center content-center items-center">
+  <div
+    class="common-layout h-full bg-[#f2f2ee] flex justify-center content-center items-center"
+  >
     <el-card class="w-3/4">
       <template #header>
         <div class="card-header">
@@ -71,7 +73,12 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import type { ComponentSize, FormInstance, FormRules } from "element-plus";
+import {
+  ElMessage,
+  type ComponentSize,
+  type FormInstance,
+  type FormRules,
+} from "element-plus";
 import { Lock } from "@element-plus/icons-vue";
 import type { ChangePasswordForm } from "@/types/apis/user";
 import { changePassword } from "@/apis/user";
@@ -82,7 +89,7 @@ const validator = useValidators();
 
 const formSize = ref<ComponentSize>("default");
 const ruleFormRef = ref<FormInstance>();
-  const changePasswordFormRules: FormRules = {
+const changePasswordFormRules: FormRules = {
   currentPassword: [validator.required, validator.password],
   newPassword: [validator.required, validator.password],
   confirmPassword: [validator.required, validator.confirmPassword],
@@ -97,13 +104,18 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      changePassword(ruleForm)
-
+      const response = changePassword(ruleForm);
+      response.then((res) => {
+        if (res.statusCode === 200) {
+          ElMessage.success("Thay đổi mật khẩu thành công");
+        } else {
+          ElMessage.error(res.data);
+        }
+      });
     } else {
       console.log("error submit!", fields);
     }
   });
-  console.log("🚀 ~ save ~ save:");
   showForm.value = false;
 };
 </script>
