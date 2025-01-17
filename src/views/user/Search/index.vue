@@ -6,27 +6,25 @@
         <el-form :inline="true">
           <el-form-item>
             <div class="w-64">
-              <el-autocomplete
+              <el-input
                 class="search-custom"
-                v-model="state"
+                v-model="keyTemp"
                 size="large"
-                :fetch-suggestions="querySearchAsync"
                 placeholder="Search..."
                 clearable
-                @select="handleSelect"
               >
                 <template #prefix>
                   <el-icon>
                     <Search />
                   </el-icon>
                 </template>
-              </el-autocomplete>
+              </el-input>
             </div>
           </el-form-item>
           <el-form-item>
             <CustomSelect
-              v-model="form.type"
-              :filter-data="filterData.type"
+              v-model="form.role"
+              :filter-data="filterData.role"
               label="Vai trò:"
               clearable
               style="width: 200px"
@@ -45,7 +43,7 @@
           </el-form-item>
           <el-form-item>
             <CustomSelect
-              v-model="form.people"
+              v-model="form.relationsive"
               :filter-data="filterData.relationship"
               label="Mọi người:"
               clearable
@@ -76,7 +74,11 @@
 
       <!-- Kết quả tìm kiếm -->
       <div class="result-container space-y-2">
-        <ProfileCard :data="profiles" :pagination="pagination" />
+        <ProfileCard
+          :data="profiles"
+          :pagination="pagination"
+          @onChangePage="onChangePage"
+        />
       </div>
     </div>
   </div>
@@ -89,26 +91,21 @@ import CustomSelect from "@/components/CustomSelect/index.vue";
 import ProfileCard from "./components/ProfileCard.vue";
 import { useSearchHook } from "./hook";
 import type { SearchForm } from "@/types/apis/user";
+import { debounce } from "@/utils";
 
-const {
-  onGetSearchHistories,
-  onSearch,
-  profiles,
-  pagination,
-  searchHistories,
-} = useSearchHook();
-// Dữ liệu tìm kiếm
-const state = ref<string>(""); // Giá trị tìm kiếm hiện tại
+const { onGetSearchHistories, onSearch, profiles, pagination, loading } =
+  useSearchHook();
 const form = ref<SearchForm>({
   key: "",
-  type: "",
+  role: "",
   category: "",
   rate: 0,
-  people: "",
+  relationsive: "",
 });
+const keyTemp = ref(form.value.key);
 
 const filterData = {
-  type: [
+  role: [
     { key: "user", value: "Người dùng" },
     { key: "artist", value: "Nghệ sỹ" },
   ],
@@ -130,43 +127,40 @@ const filterData = {
     { key: "isPending", value: "Chờ phê duyệt" },
   ],
 };
-// Mảng người dùng
-interface User {
-  value: string; // Tên người dùng
-  profileCode: string; // Mã hồ sơ
-  avatar: string; // Ảnh đại diện
-  friendCount: number; // Số bạn bè
-  isArtist: boolean; // Có phải nghệ sĩ không
-}
 
+const onChangePage = (val: number) => {
+  pagination.value.page = val;
+  onSearch(form.value);
+};
 const formatTooltip = (val: number) => {
   return val + " sao";
 };
-// Xử lý khi tìm kiếm
-const querySearchAsync = (queryString: string, cb: (arg: User[]) => void) => {
-  const results = queryString
-    ? profiles.value.filter((user) =>
-        user.fullName.toLowerCase().includes(queryString.toLowerCase())
-      )
-    : profiles.value;
-  cb(results);
-};
 
-const handleSelect = (item: User) => {
-  console.log("Đã chọn:", item);
-};
+const debouncedSearch = debounce(() => {
+  form.value.key = keyTemp.value; // Cập nhật `form.key` từ `keyTemp`
+}, 1000);
 
-watch(form, (val) => {
-  onSearch(val);
+// Theo dõi `keyTemp` và debounce tìm kiếm
+watch(keyTemp, () => {
+  loading.value = true;
+  debouncedSearch();
+  loading.value = false;
 });
+// Theo dõi toàn bộ `form`
+watch(
+  form,
+  (val) => {
+    onSearch(val);
+  },
+  { deep: true }
+);
 
 onBeforeMount(() => {
   onSearch(form.value);
-  onGetSearchHistories();
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .result-container {
   margin-top: 20px;
 }

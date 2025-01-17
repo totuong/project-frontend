@@ -8,7 +8,6 @@
       :fetch-suggestions="querySearchAsync"
       placeholder="Search..."
       clearable
-      @blur="handleBlur"
       @select="handleSelect"
     >
       <template #default="{ item }">
@@ -36,14 +35,14 @@
               </div>
             </div>
           </div>
-          <el-button
+          <!-- <el-button
             size="small"
             circle
             class=""
             @click.stop.once="handleCloseClick"
           >
             <el-icon><Close /></el-icon>
-          </el-button>
+          </el-button> -->
         </div>
       </template>
       <template #prefix>
@@ -77,14 +76,7 @@ interface User {
 const handleCloseClick = () => {
   console.log("Close button clicked");
 };
-const handleBlur = (event:any) => {
-  event.preventDefault()
-  event.stop();
-  console.log("🚀 ~ handleBlur ~ event:", event)
-  console.log("🚀 ~ handleBlur ~ event:", event.preventDefault())
-  console.log("Blur event");
-  event.stopImmediatePropagation()
-};
+
 const users = ref<User[]>([]);
 let timeout: ReturnType<typeof setTimeout>;
 const loadAllUsers = () => {

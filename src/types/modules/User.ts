@@ -21,6 +21,7 @@ export type Profile = {
   address: string;
   role: string;
   fullName: string;
+  friendship: Friendship;
   totalFriend: number;
   totalFollower: number;
   totalFollowing: number;
@@ -54,7 +55,7 @@ export type SearchHistory = {
   type: string;
   category: string;
   rate: number;
-}
+};
 
 export const defaultBank: Bank = {
   id: "",
@@ -79,6 +80,7 @@ export const defaultProfile: Profile = {
   gender: "",
   address: "",
   fullName: "",
+  friendship: null,
   totalFriend: 0,
   totalFollower: 0,
   totalFollowing: 0,

@@ -19,10 +19,10 @@ export type Profile = {
 
 export type SearchForm = {
   key: string;
-  type: string;
+  role: string;
   category: string;
   rate: number;
-  people: string;
+  relationsive: string;
 };
 
 export type ChangePasswordForm = {
