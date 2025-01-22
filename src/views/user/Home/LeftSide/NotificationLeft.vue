@@ -10,38 +10,6 @@
         <span>Hôm nay là sinh nhật của Duy Anh</span>
         <Icon icon="openmoji:cake" />
       </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
-      <div class="flex items-center space-x-2">
-        <span>Hôm nay là sinh nhật của Duy Anh</span>
-        <Icon icon="openmoji:cake" />
-      </div>
     </el-scrollbar>
   </div>
 </template>

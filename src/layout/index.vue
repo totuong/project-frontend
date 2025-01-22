@@ -52,7 +52,7 @@ let LayOutSettingStore = useLayOutSettingStore();
         <el-dropdown class="flex" trigger="click">
           <span class="flex flex-row items-center">
             <img
-              :src="avatarUrl ?? '/logo.png'"
+               :src="convertLocalPathToUrl(useUserStore().avatar)??(useUserStore().role==='USER'?'/logo.png':'/default-artist-avatar.jpg')"
               alt="Avatar"
               class="mr-3 w-8 h-8 rounded-full object-cover"
               width="32"

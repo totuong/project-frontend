@@ -12,7 +12,7 @@
       </div>
       <hr class="header-divider" />
     </template>
-    <el-scrollbar height="600px" class="relative">
+    <el-scrollbar height="670px" class="relative">
       <PostComponent :data="data" :detail="true" />
       <PostComment :data="data" />
     </el-scrollbar>

@@ -4,7 +4,7 @@
       <div class="flex items-center">
         <button >
           <el-avatar
-            :src="convertLocalPathToUrl(profile.avatar)??profile.role==='USER'?'/logo.png':'/default-artist-avatar.jpg'"
+            :src="convertLocalPathToUrl(profile.avatar)??(profile.role==='USER'?'/logo.png':'/default-artist-avatar.jpg')"
             size="large"
           />
         </button>

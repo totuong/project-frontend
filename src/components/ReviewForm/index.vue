@@ -106,9 +106,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
     .validate()
     .then((valid) => {
       if (valid) {
-        console.log("🚀 ~ .then ~ !form.value.id:", !form.value.id);
-        console.log("🚀 ~ .then ~ form.value.id:", form.value.id);
-
         if (form.value.id) {
           onUpdateReview(form.value)
             .then((response) => {
@@ -166,7 +163,15 @@ async function showModel(orderId: string, artistId: string) {
   try {
     await onGetByOrder(orderId);
     await onGetReviews(artistId);
-    form.value = review.value;
+    if (review.value) {
+      form.value = review.value;
+    } else {
+      form.value.orderId = orderId;
+      form.value.artistId = artistId;
+      form.value.rate = 0;
+      form.value.comment = "";
+      form.value.id = null;
+    }
     showForm.value = true;
   } catch (error) {
     ElMessage.error({

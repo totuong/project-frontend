@@ -44,7 +44,10 @@ export function usePostHook() {
 
   async function onGetComments(id: string) {
     const { data } = await getComments(id);
-    comments.value = data;
+    comments.value = data.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   }
 
   async function onCreateCommnent(data: CommentForm) {

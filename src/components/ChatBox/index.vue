@@ -5,7 +5,7 @@
     >
       <div class="status flex flex-col">
         <span class="text-lg font-semibold">
-          Chat with {{ conversation.user2.name }}
+          Sơn Tùng
         </span>
         <div class="flex flex-row items-center">
           <div
@@ -140,32 +140,32 @@ const conversation = reactive({
     avatar: "https://example.com/jane-avatar.jpg",
   },
   messages: [
-    {
-      senderId: 1,
-      text: "Hi Jane, how can I help you today?",
-      timestamp: "2024-11-19T08:30:00Z",
-    },
-    {
-      senderId: 2,
-      text: "Hello John, I need assistance with my order.",
-      timestamp: "2024-11-19T08:31:00Z",
-    },
-    {
-      senderId: 1,
-      text: "Sure! Can you provide your order number?",
-      timestamp: "2024-11-19T08:32:00Z",
-    },
-    {
-      senderId: 2,
-      text: "My order number is #987654.",
-      timestamp: "2024-11-19T08:33:00Z",
-    },
-    {
-      senderId: 1,
-      text: "I see the issue, I'll escalate it to the support team.",
-      timestamp: "2024-11-19T08:34:00Z",
-    },
-  ],
+  {
+    senderId: 1,
+    text: "Chào, ngày mai bạn rảnh không?",
+    timestamp: "2024-11-19T08:30:00Z",
+  },
+  {
+    senderId: 2,
+    text: "Xin chào , tôi cần hỗ trợ với đơn hàng của mình.",
+    timestamp: "2024-11-19T08:31:00Z",
+  },
+  {
+    senderId: 1,
+    text: "Chắc chắn rồi! Bạn có thể cung cấp số đơn hàng của mình không?",
+    timestamp: "2024-11-19T08:32:00Z",
+  },
+  {
+    senderId: 2,
+    text: "Số đơn hàng của tôi là #987654.",
+    timestamp: "2024-11-19T08:33:00Z",
+  },
+  {
+    senderId: 1,
+    text: "Tôi đã thấy vấn đề, tôi sẽ chuyển nó tới đội hỗ trợ.",
+    timestamp: "2024-11-19T08:34:00Z",
+  },
+],
 });
 
 // Trạng thái online/offline

@@ -12,7 +12,7 @@
 
     <div class="post-header flex items-center mb-2">
       <el-avatar
-        src="https://chontruong.edu.vn/wp-content/uploads/2024/09/avatar-facebook-3f7584h.webp"
+        src="/default-artist-avatar.jpg"
         size="large"
       />
       <div class="ml-2">
